@@ -35,6 +35,11 @@ jobs:
       - name: Install kubectl
         uses: Azure/setup-kubectl@v4.0.0
 
+      - name: Install Helm
+        uses: Azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Add kubeconfig
         env:
           KUBECTLCONFFULL: ${{ secrets.KUBECONFIG }}
