@@ -1,0 +1,47 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "master" branch
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: ci
+          version: 1.72.1
+          hostname: kreat8s-deploy 
+          
+      - name: Install kubectl
+        uses: Azure/setup-kubectl@v4.0.0
+
+      - name: Add kubeconfig
+        env:
+          KUBECTLCONFFULL: ${{ secrets.KUBECONFIG }}
+        run: |
+            mkdir -p $HOME/.kube
+            echo "$KUBECTLCONFFULL" > $HOME/.kube/config
+
+      - name: Run Kustomize
+        run: |
+          kubectl kustomize --enable-helm | kubectl apply -f 
