@@ -38,6 +38,7 @@ graph TD;
 ```
 
 ### Components
+* GitHub Actions - Deployment pipeline
 * ArgoCD - For GitOps, manages all the deployments (except itself and the CNI)
 * Cilium - Load balancer, network policies
 * Cloudflared - Argo Tunnel, for exposing services to the internet
@@ -48,6 +49,7 @@ graph TD;
 * Nextcloud - For file sharing
 * Mastodon - For social networking
 * Forgejo - For Git repositories
+
 
 ## Installation
 The setup assumes you already have Kubernetes installed with a CNI (Tested with Calico, should work in any), Helm and cloudflared.
