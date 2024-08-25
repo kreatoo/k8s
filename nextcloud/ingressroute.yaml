@@ -1,0 +1,27 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: nextcloud
+  namespace: nextcloud
+  annotations:
+    cert-manager.io/cluster-issuer: mainissuer
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cloud.kreato.dev`)
+      priority: 10
+      services:
+        - kind: Service
+          name: nextcloud
+          namespace: nextcloud
+          passHostHeader: true
+          port: 8080
+          scheme: http
+  tls:
+    secretName: wildcard-kreato.dev-tls
+
+    domains:
+      - main: cloud.kreato.dev

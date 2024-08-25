@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+spec:
+  destination:
+    namespace: traefik
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'https://traefik.github.io/charts'
+    targetRevision: 30.*
+    chart: traefik
+    helm:
+      values: |
+        ports:
+          web:
+            redirectTo: 
+              port: websecure
+          websecure:
+            hostPort: 443
+
+        ingressClass:
+          enabled: true
+          isDefaultClass: true
+
+        additionalArguments:
+          - --providers.kubernetescrd.allowCrossNamespace=true
+          - --entrypoints.name.http3
+          #- --entryPoints.web.forwardedHeaders.insecure
+          #- --log.level=DEBUG
+          #- --serverstransport.insecureskipverify=true
+        
+        tlsStore:
+          default:
+            defaultCertificate:
+              secretName: wildcard-kreato.dev-tls
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

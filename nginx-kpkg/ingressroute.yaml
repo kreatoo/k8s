@@ -1,0 +1,14 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mirror-ingress
+  namespace: nginx
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`bin.kreato.dev`)
+      kind: Rule
+      services:
+        - name: webserver
+          port: 80

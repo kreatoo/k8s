@@ -1,0 +1,27 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: forgejo
+  namespace: forgejo
+  annotations:
+    cert-manager.io/cluster-issuer: mainissuer
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`git.kreato.dev`)
+      priority: 10
+      services:
+        - kind: Service
+          name: forgejo-http
+          namespace: forgejo
+          passHostHeader: true
+          port: 3000
+          scheme: http
+  tls:
+    secretName: wildcard-kreato.dev-tls
+
+    domains:
+      - main: git.kreato.dev

@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: forgejo
+  namespace: argocd
+spec:
+  destination:
+    namespace: forgejo
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'codeberg.org/forgejo-contrib'
+    targetRevision: 7.*
+    chart: forgejo
+    helm:
+      values: |
+        postgresql-ha:
+          postgresql:
+            replicaCount: 2
+        gitea:
+          config:
+            server:
+              DOMAIN: git.kreato.dev
+              ROOT_URL: https://git.kreato.dev
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

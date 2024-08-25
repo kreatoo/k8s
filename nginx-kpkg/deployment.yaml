@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: webserver
+  namespace: nginx
+  name: webserver
+spec:
+  selector:
+    matchLabels:
+      app: webserver
+  template:
+    metadata:
+      labels:
+        app: webserver
+    spec:
+      containers:
+      - image: "nginx:latest"
+        name: webserver
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: binrepo-v
+      volumes:
+        - name: binrepo-v
+          persistentVolumeClaim:
+            claimName: pvc 

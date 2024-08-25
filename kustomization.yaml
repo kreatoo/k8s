@@ -1,0 +1,16 @@
+helmCharts:
+  - name: argo-cd
+    repo: https://argoproj.github.io/argo-helm
+    releaseName: argocd
+    version: 7.4.5
+    namespace: argocd
+    
+resources:
+  - cilium/
+  - cert-manager/
+  - traefik/
+  - nginx-kpkg/
+  - forgejo/
+  - nextcloud/
+  #- mastodon/
+  #- robusta/ # Need to add generated_values.yaml, see README.md for details
