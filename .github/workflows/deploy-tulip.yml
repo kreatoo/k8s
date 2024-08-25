@@ -57,4 +57,4 @@ jobs:
 
       - name: Run Kustomize
         run: |
-          kubectl kustomize --enable-helm | kubectl apply -f 
+          kubectl kustomize --enable-helm | kubectl apply -f - 
