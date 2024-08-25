@@ -34,14 +34,12 @@ graph TD;
     service-->plato
     tulip-->cilium
     plato-->cilium
-    cilium-->cloudflared
 ```
 
 ### Components
 * GitHub Actions - Deployment pipeline
 * ArgoCD - For GitOps, manages all the deployments (except itself and the CNI)
 * Cilium - Load balancer, network policies
-* Cloudflared - Argo Tunnel, for exposing services to the internet
 * cert-manager - For managing certificates
 * Robusta - For alarms and monitoring
 * Traefik - Ingress controller
@@ -52,7 +50,7 @@ graph TD;
 
 
 ## Installation
-The setup assumes you already have Kubernetes installed with a CNI (Tested with Calico, should work in any), Helm and cloudflared.
+The setup assumes you already have Kubernetes installed with a CNI (Tested with Calico, should work in any) and Helm. 
 
 This setup uses Kustomize to manage the manifests. To install the setup, clone the repo and run the following commands:
 
