@@ -1,6 +1,3 @@
-> [!WARNING]  
-> This is a work in progress and is not yet ready for production use.
-
 ## kreat8s
 Kreato's Kubernetes setup
 
