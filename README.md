@@ -45,7 +45,6 @@ graph TD;
 * Traefik - Ingress controller
 * Nginx-kpkg - for hosting a kpkg repository
 * Nextcloud - For file sharing
-* Mastodon - For social networking
 * Forgejo - For Git repositories
 
 
