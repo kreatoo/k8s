@@ -5,10 +5,19 @@ metadata:
   namespace: nginx
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
     - match: Host(`bin.kreato.dev`)
       kind: Rule
       services:
         - name: webserver
+          kind: Service
+          namespace: nginx
+          passHostHeader: true
+          scheme: http
           port: 80
+
+  tls:
+    secretName: wildcard-kreato.dev-tls
+    domains:
+      - main: bin.kreato.dev
