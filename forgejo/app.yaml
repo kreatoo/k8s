@@ -21,6 +21,8 @@ spec:
             server:
               DOMAIN: git.kreato.dev
               ROOT_URL: https://git.kreato.dev
+            service:
+              DISABLE_REGISTRATION: true
   sources: []
   project: default
   syncPolicy:
