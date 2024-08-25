@@ -12,5 +12,4 @@ resources:
   - nginx-kpkg/
   - forgejo/
   - nextcloud/
-  #- mastodon/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details
