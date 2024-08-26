@@ -1,5 +1,0 @@
-resources:
-  - namespace.yaml
-  - app.yaml
-  - ippool.yaml
-  - netpol.yaml

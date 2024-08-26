@@ -6,7 +6,7 @@ helmCharts:
     namespace: argocd
     
 resources:
-  - cilium/
+  - calico/
   - cert-manager/
   - traefik/
   - nginx-kpkg/
