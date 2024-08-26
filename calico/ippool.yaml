@@ -1,8 +1,13 @@
 apiVersion: projectcalico.org/v3
 kind: IPPool
 metadata:
-  name: blue-pool
+  name: main.ippool-1
 spec:
-  ranges:
-  - cidr: "10.0.10.0/24"
-  - cidr: "2004::0/64"
+  cidr: 10.1.0.0/16
+  ipipMode: CrossSubnet
+  natOutgoing: true
+  disabled: false
+  nodeSelector: all()
+  allowedUses:
+    - Workload
+    - Tunnel
