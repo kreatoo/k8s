@@ -4,3 +4,9 @@ resources:
   - configmap.yaml
   - issuer.yaml
   - wildcard-cert.yaml
+
+secretGenerator:
+  - name: cloudflare-api-token-secret
+    namespace: traefik
+    envs:
+      - .env
