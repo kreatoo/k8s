@@ -29,14 +29,14 @@ Kreato's Kubernetes setup
 graph TD;
     service-->tulip
     service-->plato
-    tulip-->cilium
-    plato-->cilium
+    tulip-->metallb
+    plato-->metallb
 ```
 
 ### Components
 * GitHub Actions - Deployment pipeline
 * ArgoCD - For GitOps, manages all the deployments (except itself and the CNI)
-* Cilium - Load balancer, network policies
+* MetalLB - Load balancer, network policies
 * cert-manager - For managing certificates
 * Robusta - For alarms and monitoring
 * Traefik - Ingress controller
@@ -46,7 +46,7 @@ graph TD;
 
 
 ## Installation
-The setup assumes you already have Kubernetes installed with a CNI (Tested with Calico, should work in any) and Helm. 
+The setup assumes you already have Kubernetes installed with a CNI (Tested with Calico, should work in any), Helm and MetalLB. 
 
 This setup uses Kustomize to manage the manifests. To install the setup, clone the repo and run the following commands:
 
