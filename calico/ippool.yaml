@@ -1,0 +1,8 @@
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: blue-pool
+spec:
+  ranges:
+  - cidr: "10.0.10.0/24"
+  - cidr: "2004::0/64"

@@ -1,8 +1,0 @@
-apiVersion: projectcalico.org/v3
-kind: BGPConfiguration
-metadata:
-  name: default
-spec:
-  serviceClusterIPs:
-  - cidr: 10.96.0.0/16
-  - cidr: fd00:1234::/112
