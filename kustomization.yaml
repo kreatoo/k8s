@@ -1,11 +1,5 @@
-helmCharts:
-  - name: argo-cd
-    repo: https://argoproj.github.io/argo-helm
-    releaseName: argocd
-    version: 7.4.5
-    namespace: argocd
-    
 resources:
+  - https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/ha/namepace-install.yaml # Not in argocd directory because namespace needs to be created first 
   - argocd/
   - metallb/
   - cert-manager/
