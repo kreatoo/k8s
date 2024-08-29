@@ -26,7 +26,7 @@ jobs:
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
-          tags: tag:ci
+          tags: tag:k8s-deploy
           version: 1.72.1
           hostname: kreat8s-deploy 
           
@@ -34,7 +34,7 @@ jobs:
         uses: Azure/setup-kubectl@v4.0.0
 
       - name: Install Helm
-        uses: Azure/setup-helm@v3
+        uses: Azure/setup-helm@v4.2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
