@@ -1,5 +1,4 @@
 resources:
-  - https://raw.githubusercontent.com/argoproj/argo-cd/master/manifests/ha/namespace-install.yaml # Not in argocd directory because namespace needs to be created first 
   - argocd/
   - metallb/
   - cert-manager/
