@@ -6,6 +6,7 @@ helmCharts:
     namespace: argocd
     
 resources:
+  - argocd/
   - metallb/
   - cert-manager/
   - traefik/
