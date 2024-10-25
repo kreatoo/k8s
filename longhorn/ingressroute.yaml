@@ -1,0 +1,27 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: longhorn
+  namespace: longhorn-system
+  annotations:
+    cert-manager.io/cluster-issuer: mainissuer
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`longhorn.internal.kreato.dev`)
+      priority: 10
+      services:
+        - kind: Service
+          name: longhorn-frontend
+          namespace: longhorn-system
+          passHostHeader: true
+          port: 80
+          scheme: http
+  tls:
+    secretName: wildcard-kreato.dev-tls
+
+    domains:
+      - main: longhorn.internal.kreato.dev
