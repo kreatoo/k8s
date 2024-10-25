@@ -4,6 +4,7 @@ resources:
   - cert-manager/
   - traefik/
   - nginx-kpkg/
-  - forgejo/
+  #- forgejo/
+  - mattermost/
   - nextcloud/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details

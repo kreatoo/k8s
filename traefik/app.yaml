@@ -13,6 +13,9 @@ spec:
     chart: traefik
     helm:
       values: |
+        deployment:
+          replicas: 2
+
         ports:
           web:
             redirectTo: 
