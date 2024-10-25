@@ -8,6 +8,7 @@ spec:
   dnsNames:
     - "kreato.dev"
     - "*.kreato.dev"
+    - "*.internal.kreato.dev"
   issuerRef:
     name: mainissuer
     kind: ClusterIssuer
