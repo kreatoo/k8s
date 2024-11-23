@@ -1,0 +1,96 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gatus
+  namespace: argocd
+spec:
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
+  project: default
+  sources:
+    - chart: gatus
+      repoURL: https://twin.github.io/helm-charts
+      targetRevision: v1.*.*
+      helm:
+        values: |
+          config:
+            endpoints:
+              - name: "rose"
+                url: "https://rose.kreato.dev"
+                group: "internal"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "tulip"
+                group: "internal"
+                url: "https://tulip.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "lb"
+                group: "internal"
+                url: "https://lb.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "binrepo"
+                group: "infra"
+                url: "https://bin.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 403"
+              - name: "mirror"
+                group: "infra"
+                url: "https://mirror.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 403"
+              - name: "main"
+                group: "infra"
+                url: "https://kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
+              - name: "helm"
+                group: "infra"
+                url: "https://helm.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
+              - name: "klinux"
+                group: "infra"
+                url: "https://linux.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
+              - name: "tulip.internal"
+                group: "private"
+                url: "https://tulip.internal.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "rose.internal"
+                group: "private"
+                url: "https://rose.internal.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "rr.internal"
+                group: "private"
+                url: "https://rr.internal.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "longhorn.internal"
+                group: "private"
+                url: "https://longhorn.internal.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gatus
