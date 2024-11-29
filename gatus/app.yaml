@@ -17,6 +17,8 @@ spec:
       targetRevision: v1.*.*
       helm:
         values: |
+          nodeSelector:
+            kubernetes.io/hostname: lily
           config:
             endpoints:
               - name: "rose"
@@ -28,6 +30,12 @@ spec:
               - name: "tulip"
                 group: "internal"
                 url: "https://tulip.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "lily"
+                group: "internal"
+                url: "https://lily.kreato.dev"
                 interval: 60s
                 conditions:
                   - "[STATUS] == 404"
@@ -76,6 +84,12 @@ spec:
               - name: "rose.internal"
                 group: "private"
                 url: "https://rose.internal.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 404"
+              - name: "lily.internal"
+                group: "private"
+                url: "https://lily.internal.kreato.dev"
                 interval: 60s
                 conditions:
                   - "[STATUS] == 404"
