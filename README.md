@@ -1,3 +1,6 @@
+> [!WARNING]  
+> I am planning to merge kreatoo/infra with this repository, which may result with this repository being archived.
+
 ## kreat8s
 Kreato's Kubernetes setup
 
@@ -5,32 +8,41 @@ Kreato's Kubernetes setup
 
 ### Servers
 
-(This is mostly taken from https://github.com/kreatoo/infra)
-
 * tulip
     * Cloud: OCI (Oracle Cloud Infrastructure)
     * Region: Frankfurt
     * OS: AlmaLinux
-    * Kubernetes distro: Plain K8s
-    * Role: Control-plane node
+    * Kubernetes distro: K0s
+    * Role: Agent node
     * Machine: VM.Standard.A1.Flex (Ampere Altra) with 4 cores, 12GB RAM, 200GB storage
 
-* plato
+* rose
     * Cloud: Hetzner Cloud
     * Region: Helsinki
-    * OS: Ubuntu 24.04
-    * Kubernetes distro: Plain K8s
+    * OS: Fedora 41
+    * Kubernetes distro: K0s
+    * Role: Control plane node
+    * Machine: CAX31 (Ampere Altra) with 8 cores, 16GB RAM, 160GB storage
+ 
+* lily
+    * Cloud: Hetzner Cloud
+    * Region: Falkenstein
+    * OS: Fedora 41
+    * Kubernetes distro: K0s
     * Role: Agent node
-    * Machine: CAX11 (Ampere Altra) with 2 cores, 4GB RAM, 40GB storage
+    * Machine: CX22 (Intel Xeon) with 2 cores, 4GB RAM, 40GB storage
 
 
 ### Workload
 ```mermaid
 graph TD;
-    service-->tulip
-    service-->plato
+    Ingress-->tulip
+    Ingress-->lily
+    Ingress-->rose
     tulip-->metallb
-    plato-->metallb
+    lily-->metallb
+    rose-->metallb
+    metallb-->cloudflare["cloudflare (roundrobin)"]
 ```
 
 ### Components
@@ -38,11 +50,12 @@ graph TD;
 * ArgoCD - For GitOps, manages all the deployments (except itself and the CNI)
 * MetalLB - Load balancer, network policies
 * cert-manager - For managing certificates
-* Robusta - For alarms and monitoring
+* Robusta - For alarms and monitoring (Unused)
 * Traefik - Ingress controller
 * Nginx-kpkg - for hosting a kpkg repository
-* Nextcloud - For file sharing
+* Nextcloud - For file sharing (Disabled at the moment, optional)
 * Forgejo - For Git repositories
+* Gatus - For health checks
 
 
 ## Installation
