@@ -20,6 +20,14 @@ spec:
           nodeSelector:
             kubernetes.io/hostname: lily
           config:
+            ui:
+              header: "kreato.dev - Health Status"
+              title: "Health Status | kreato.dev"
+              description: "kreato.dev infrastructure health status, including internal and external services, monitored every 60 seconds. Monitoring is done by Gatus."
+              logo: "https://raw.githubusercontent.com/kubernetes/kubernetes/refs/heads/master/logo/logo.png"
+              buttons:
+                - name: "Source Code"
+                  link: https://github.com/kreatoo/k8s
             endpoints:
               - name: "rose"
                 url: "https://rose.kreato.dev"
