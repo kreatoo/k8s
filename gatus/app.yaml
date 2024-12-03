@@ -56,7 +56,7 @@ spec:
                 url: "https://mirror.kreato.dev"
                 interval: 60s
                 conditions:
-                  - "[STATUS] == 403"
+                  - "[STATUS] == any(404, 403)"
               - name: "main"
                 group: "infra"
                 url: "https://kreato.dev"
@@ -72,6 +72,12 @@ spec:
               - name: "klinux"
                 group: "infra"
                 url: "https://linux.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
+              - name: "media"
+                group: "infra"
+                url: "https://media.kreato.dev"
                 interval: 60s
                 conditions:
                   - "[STATUS] == 200"
