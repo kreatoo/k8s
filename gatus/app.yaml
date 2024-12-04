@@ -89,6 +89,12 @@ spec:
                 interval: 60s
                 conditions:
                   - "[STATUS] == 200"
+              - name: "git"
+                group: "infra"
+                url: "https://git.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
               - name: "tulip.internal"
                 group: "private"
                 url: "https://tulip.internal.kreato.dev"
