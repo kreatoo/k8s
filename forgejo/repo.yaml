@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+data:
+  repositories:
+    forgejo-helm:
+      url: code.forgejo.org/forgejo-helm
+      type: helm
+      name: forgejo
+      enableOCI: "true"

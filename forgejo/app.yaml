@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: forgejo
+  namespace: argocd
+spec:
+  destination:
+    namespace: forgejo
+    server: 'https://kubernetes.default.svc'
+  source:
+    repoURL: 'code.forgejo.org/forgejo-helm'
+    targetRevision: 10.*
+    chart: forgejo
+    helm:
+      values: |
+        redis:
+          enabled: true
+        redis-cluster:
+          enabled: true
+        postgresql:
+          enabled: true
+        postgresql-ha:
+          enabled: true
+        persistence:
+          enabled: true
+        gitea:
+          config:
+            service:
+              DISABLE_REGISTRATION: true
+            server:
+              ROOT_URL: https://git.kreato.dev
+              SSH_DOMAIN: git.kreato.dev
+              DOMAIN: git.kreato.dev
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
