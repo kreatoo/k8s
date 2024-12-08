@@ -8,4 +8,4 @@ data:
       url: code.forgejo.org/forgejo-helm
       type: helm
       name: forgejo
-      enableOCI: "true"
+      enableOCI: 'true'
