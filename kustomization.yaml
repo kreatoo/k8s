@@ -7,5 +7,6 @@ resources:
   - longhorn/
   - gha-runner/
   - forgejo/
+  - gatus/
   #- nextcloud/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details
