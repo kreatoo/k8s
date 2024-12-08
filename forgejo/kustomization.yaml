@@ -1,4 +1,3 @@
 resources:
-  - repo.yaml
   - app.yaml
   - ingressroute.yaml
