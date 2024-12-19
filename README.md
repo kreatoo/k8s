@@ -56,7 +56,7 @@ graph TD;
 * Nextcloud - For file sharing (Disabled at the moment, optional)
 * Forgejo - For Git repositories
 * Gatus - For health checks
-
+* k0s - K8s distribution, has autopilot configured
 
 ## Installation
 The setup assumes you already have Kubernetes installed with a CNI (Tested with Calico, should work in any), Helm and MetalLB. 

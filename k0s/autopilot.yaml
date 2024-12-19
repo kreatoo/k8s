@@ -1,0 +1,26 @@
+apiVersion: autopilot.k0sproject.io/v1beta2
+kind: UpdateConfig
+metadata:
+  name: infra-update
+  namespace: default
+spec:
+  channel: edge_release
+  updateServer: https://updates.k0sproject.io/
+  upgradeStrategy:
+    type: periodic
+    periodic:
+      # The folowing fields configures updates to happen only on Tue or Wed at 13:00-15:00
+      days: [Tuesdsay,Wednesday]
+      startTime: "23:00"
+      length: 2h
+  planSpec:
+    commands:
+      - k0supdate:
+          targets:
+            controllers:
+              discovery:
+                static:
+                  nodes:
+                    - tulip
+                    - rose
+                    - lily
