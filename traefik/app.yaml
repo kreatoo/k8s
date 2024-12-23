@@ -9,12 +9,12 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     repoURL: 'https://traefik.github.io/charts'
-    targetRevision: 3*.*
+    targetRevision: '*'
     chart: traefik
     helm:
       values: |
         deployment:
-          replicas: 3
+          replicas: 2
 
         ports:
           web:
