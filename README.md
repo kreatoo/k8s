@@ -1,8 +1,8 @@
-> [!WARNING]  
-> I am planning to merge kreatoo/infra with this repository, which may result with this repository being archived.
-
 ## kreat8s
 Kreato's Kubernetes setup
+
+![Load Balancer Uptime (7d)](https://status.kreato.dev/api/v1/endpoints/internal_lb/uptimes/7d/badge.svg) ![Load Balancer Uptime (24h)](https://status.kreato.dev/api/v1/endpoints/internal_lb/uptimes/24h/badge.svg) ![Load Balancer Uptime (1h)](https://status.kreato.dev/api/v1/endpoints/internal_lb/uptimes/1h/badge.svg)
+
 
 ## Setup
 
