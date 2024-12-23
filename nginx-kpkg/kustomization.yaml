@@ -5,3 +5,4 @@ resources:
   - pv.yaml
   - pvc.yaml
   - service.yaml
+  - update-cronjob.yaml
