@@ -6,7 +6,7 @@ resources:
   - nginx-kpkg/
   - longhorn/
   - gha-runner/
-  - forgejo/
+  #- forgejo/
   - gatus/
   #- nextcloud/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details
