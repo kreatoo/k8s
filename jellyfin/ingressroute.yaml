@@ -1,0 +1,27 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jellyfin
+  namespace: jellyfin
+  annotations:
+    cert-manager.io/cluster-issuer: mainissuer
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`media.kreato.dev`)
+      priority: 10
+      services:
+        - kind: Service
+          name: jellyfin
+          namespace: jellyfin
+          passHostHeader: true
+          port: 8096
+          scheme: http
+  tls:
+    secretName: wildcard-kreato.dev-tls
+
+    domains:
+      - main: media.kreato.dev

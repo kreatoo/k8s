@@ -6,6 +6,7 @@ resources:
   - nginx-kpkg/
   - longhorn/
   - gha-runner/
+  - jellyfin/
   #- forgejo/
   - gatus/
   #- nextcloud/
