@@ -22,6 +22,8 @@ spec:
               port: websecure
           websecure:
             hostPort: 443
+            middlewares:
+              - cloudflare
 
         ingressClass:
           enabled: true
@@ -34,6 +36,12 @@ spec:
           #- --log.level=DEBUG
           #- --serverstransport.insecureskipverify=true
         
+        experimental:
+          plugins:
+            cloudflaregate:
+              moduleName: github.com/sstoner/cloudflaregate
+              version: v1.1.2
+
         tlsStore:
           default:
             defaultCertificate:

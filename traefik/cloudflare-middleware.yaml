@@ -1,0 +1,11 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: cloudflare
+  namespace: traefik  
+spec:
+  plugin:
+    cloudflaregate:
+      refreshInterval: "24h"
+      allowedIPs:
+        - "100.64.0.0/10" # Tailscale

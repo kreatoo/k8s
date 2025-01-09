@@ -1,0 +1,10 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: internal-hosts
+  namespace: traefik  
+spec:
+  headers:
+    allowedHosts:
+      - "longhorn.internal.kreato.dev"
+

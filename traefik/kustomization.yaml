@@ -1,2 +1,4 @@
 resources:
   - app.yaml
+  - cloudflare-middleware.yaml
+  - internal-middleware.yaml
