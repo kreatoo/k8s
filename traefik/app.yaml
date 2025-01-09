@@ -23,7 +23,7 @@ spec:
           websecure:
             hostPort: 443
             middlewares:
-              - cloudflare
+              - traefik-cloudflare@kubernetescrd
 
         ingressClass:
           enabled: true
