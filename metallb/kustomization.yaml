@@ -1,2 +1,3 @@
 resources:
   - ippool.yaml
+  - app.yaml

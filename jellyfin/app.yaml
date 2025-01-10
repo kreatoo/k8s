@@ -17,7 +17,7 @@ spec:
           config:
             enabled: true
             accessMode: ReadWriteOnce
-            size: 1Gi
+            size: 5Gi
           media:
             enabled: true
             accessMode: ReadWriteOnce
