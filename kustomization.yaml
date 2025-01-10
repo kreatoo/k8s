@@ -9,5 +9,6 @@ resources:
   - jellyfin/
   #- forgejo/
   - gatus/
+  - answers/
   #- nextcloud/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details
