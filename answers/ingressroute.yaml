@@ -1,0 +1,27 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: answer
+  namespace: answer
+  annotations:
+    cert-manager.io/cluster-issuer: mainissuer
+
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`answers.kreato.dev`)
+      priority: 10
+      services:
+        - kind: Service
+          name: answer
+          namespace: answer
+          passHostHeader: true
+          port: 80
+          scheme: http
+  tls:
+    secretName: wildcard-kreato.dev-tls
+
+    domains:
+      - main: answers.kreato.dev

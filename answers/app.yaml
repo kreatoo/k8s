@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: answer
+  namespace: argocd
+spec:
+  destination:
+    namespace: answer
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: charts
+    repoURL: 'https://github.com/apache/answer.git'
+    targetRevision: '*'
+  sources: []
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
