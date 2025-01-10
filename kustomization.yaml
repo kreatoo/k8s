@@ -5,7 +5,7 @@ resources:
   - traefik/
   - nginx-kpkg/
   - longhorn/
-  - gha-runner/
+  #- gha-runner/
   - jellyfin/
   #- forgejo/
   - gatus/
