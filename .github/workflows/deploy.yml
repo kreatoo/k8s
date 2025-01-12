@@ -43,14 +43,6 @@ jobs:
             mkdir -p $HOME/.kube
             echo "$KUBECTLCONFFULL" > $HOME/.kube/config
 
-      - name: Add .env files
-        env:
-          DOTENV_CERTMANAGER: ${{ secrets.DOTENV_CERTMANAGER }}
-          DOTENV_NEXTCLOUD: ${{ secrets.DOTENV_NEXTCLOUD }}
-        run: |
-          echo "$DOTENV_CERTMANAGER" > cert-manager/.env
-          echo "$DOTENV_NEXTCLOUD" > nextcloud/.env
-
       - name: Run Kustomize
         run: |
           kubectl kustomize --enable-helm | kubectl apply -f - 
