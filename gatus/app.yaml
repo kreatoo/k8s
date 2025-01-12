@@ -113,12 +113,6 @@ spec:
                 interval: 60s
                 conditions:
                   - "[STATUS] == 404"
-              - name: "longhorn.internal"
-                group: "private"
-                url: "https://longhorn.internal.kreato.dev"
-                interval: 60s
-                conditions:
-                  - "[STATUS] == 200"
   destination:
     server: https://kubernetes.default.svc
     namespace: gatus
