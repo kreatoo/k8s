@@ -48,14 +48,16 @@ graph TD;
 ### Components
 * GitHub Actions - Deployment pipeline
 * ArgoCD - For GitOps, manages all the deployments (except itself and the CNI)
+* 1Password - For secrets management
+* Answers - For my own Q&A platform (https://answers.kreato.dev)
 * MetalLB - Load balancer, network policies
 * cert-manager - For managing certificates
-* Robusta - For alarms and monitoring (Unused)
+* Robusta - For alarms and monitoring (Unused at the moment, optional)
 * Traefik - Ingress controller
-* Nginx-kpkg - for hosting a kpkg repository
+* Nginx-kpkg - for hosting a kpkg repository (https://bin.kreato.dev)
 * Nextcloud - For file sharing (Disabled at the moment, optional)
-* Forgejo - For Git repositories
-* Gatus - For health checks
+* Forgejo - For Git repositories (Disabled at the moment, optional)
+* Gatus - For health checks (https://status.kreato.dev)
 * k0s - K8s distribution, has autopilot configured
 
 ## Installation
