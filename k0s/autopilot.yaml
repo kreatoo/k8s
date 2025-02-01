@@ -4,7 +4,7 @@ metadata:
   name: infra-update
   namespace: default
 spec:
-  channel: edge_release
+  channel: stable
   updateServer: https://updates.k0sproject.io/
   upgradeStrategy:
     type: periodic
