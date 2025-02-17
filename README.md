@@ -76,3 +76,7 @@ Please keep in mind that Robusta is not included in the setup by default as you 
 ```bash
 kubectl apply -k robusta/
 ```
+
+## Credits
+* [mtaha.dev](https://github.com/mt190502) for some ideas
+* The Kubernetes image was taken from [Aikoyori's ProgrammingVTuberLogos](https://github.com/Aikoyori/ProgrammingVTuberLogos)
