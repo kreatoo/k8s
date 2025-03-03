@@ -16,7 +16,7 @@ Kreato's Kubernetes setup
     * OS: AlmaLinux
     * Kubernetes distro: K0s
     * Role: Agent node
-    * Machine: VM.Standard.A1.Flex (Ampere Altra) with 4 cores, 12GB RAM, 200GB storage
+    * Machine: VM.Standard.A1.Flex (Ampere Altra) with 4 cores, 24GB RAM, 200GB storage
 
 * rose
     * Cloud: Hetzner Cloud
