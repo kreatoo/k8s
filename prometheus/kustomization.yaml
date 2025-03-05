@@ -2,13 +2,10 @@ resources:
   - namespace.yaml
   - app.yaml
   - ingressroute.yaml
-
 generatorOptions:
   disableNameSuffixHash: true
-
 secretGenerator:
   - name: nextcloud-db
     namespace: nextcloud
     envs:
       - .env
-

@@ -16,7 +16,6 @@ spec:
           passHostHeader: true
           scheme: http
           port: 80
-
   tls:
     secretName: wildcard-kreato.dev-tls
     domains:

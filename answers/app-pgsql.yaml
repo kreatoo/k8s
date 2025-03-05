@@ -14,11 +14,11 @@ spec:
     targetRevision: '15.*'
     helm:
       values: |
-          pgpool:
-            configuration: |
-              connection_cache = false
-              failover_on_backend_error = on
-              failover_on_backend_shutdown = on
+        pgpool:
+          configuration: |
+            connection_cache = false
+            failover_on_backend_error = on
+            failover_on_backend_shutdown = on
   syncPolicy:
     automated:
       prune: true

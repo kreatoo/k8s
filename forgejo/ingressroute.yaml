@@ -5,7 +5,6 @@ metadata:
   namespace: forgejo
   annotations:
     cert-manager.io/cluster-issuer: mainissuer
-
 spec:
   entryPoints:
     - websecure
@@ -22,6 +21,5 @@ spec:
           scheme: http
   tls:
     secretName: wildcard-kreato.dev-tls
-
     domains:
       - main: git.kreato.dev

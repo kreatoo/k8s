@@ -12,5 +12,3 @@ spec:
   issuerRef:
     name: mainissuer
     kind: ClusterIssuer
-
-

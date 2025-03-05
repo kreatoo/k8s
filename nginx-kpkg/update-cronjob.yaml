@@ -4,14 +4,13 @@ metadata:
   namespace: nginx
   name: nginx-updater
 rules:
-- apiGroups:
-  - extensions
-  - apps
-  resources:
-  - deployments
-  verbs:
-  - 'patch'
-
+  - apiGroups:
+      - extensions
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - 'patch'
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -19,21 +18,19 @@ metadata:
   name: nginx
   namespace: nginx
 subjects:
-- kind: ServiceAccount
-  name: sa-nginx
-  namespace: nginx
+  - kind: ServiceAccount
+    name: sa-nginx
+    namespace: nginx
 roleRef:
   kind: Role
   name: nginx
   apiGroup: ""
-
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: sa-nginx
   namespace: nginx
-
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -48,10 +45,10 @@ spec:
         spec:
           serviceAccountName: sa-nginx
           containers:
-          - name: updater
-            image: bitnami/kubectl:latest
-            command:
-            - /bin/sh
-            - -c
-            - kubectl rollout restart deployment.apps/webserver -n nginx
+            - name: updater
+              image: bitnami/kubectl:latest
+              command:
+                - /bin/sh
+                - -c
+                - kubectl rollout restart deployment.apps/webserver -n nginx
           restartPolicy: OnFailure

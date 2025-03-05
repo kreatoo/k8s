@@ -1,5 +1,4 @@
-name: YAML Lint
-
+name: YAML Format and Lint
 on:
   push:
     paths:
@@ -9,18 +8,17 @@ on:
     paths:
       - '**/*.yaml'
       - '**/*.yml'
-
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      - name: Install yamllint
+      - name: Format YAML files
         run: |
-          sudo apt-get update && sudo apt-get install -y yamllint
-
-      - name: Validate YAML syntax
-        run: |
-          find . -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 yamllint
+          find . -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 yamlfmt -w
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Format YAML files'
+          add: '*.yaml *.yml'

@@ -17,7 +17,7 @@ spec:
           host: "cloud.kreato.dev"
           username: "kreato"
           configs:
-        
+
             custom.config.php: |-
                 <?php
                 $CONFIG = array (
@@ -35,11 +35,11 @@ spec:
                   'trusted_proxies' => ['10.43.65.89'],
                   'default_phone_region' => 'tr',
                 );
-        
-        
+
+
         internalDatabase:
           enabled: false
-        
+
         externalDatabase:
           enabled: true
           type: mysql
@@ -48,13 +48,13 @@ spec:
             secretName: nextcloud-db
             usernameKey: mariadb-username
             passwordKey: mariadb-password
-        
+
         mariadb:
           enabled: true
           auth:
             existingSecret: "nextcloud-db"
-        
-        
+
+
           primary:
             persistence:
               enabled: true
@@ -63,14 +63,14 @@ spec:
           # storageClass: ""
               accessMode: ReadWriteOnce
               size: 16Gi
-        
+
         #redis:
           #enabled: true
           #auth:
             #enabled: true
             #existingSecret: "nextcloud-db"
             #existingSecretPasswordKey: "redis-password"
-        
+
         persistence:
           enabled: true
           # Use an existing Persistent Volume Claim (must be created ahead of time)
@@ -78,7 +78,6 @@ spec:
           # storageClass: ""
           accessMode: ReadWriteOnce
           size: 16Gi
-
   sources: []
   project: default
   syncPolicy:

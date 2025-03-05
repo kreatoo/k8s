@@ -15,10 +15,9 @@ spec:
       values: |
         operator:
           create: true
-        
+
         connect:
           credentialsName: op-credentials
-
   sources: []
   project: default
   syncPolicy:

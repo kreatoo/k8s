@@ -10,7 +10,7 @@ spec:
     type: periodic
     periodic:
       # The folowing fields configures updates to happen only on Tue or Wed at 13:00-15:00
-      days: [Tuesdsay,Wednesday]
+      days: [Tuesdsay, Wednesday]
       startTime: "23:00"
       length: 2h
   planSpec:

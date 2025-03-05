@@ -1,11 +1,9 @@
 name: Deploy
-
 on:
   workflow_run:
     workflows: ["YAML Lint"]
     types:
       - completed
-
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -13,7 +11,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
       - name: Connect Tailscale
         uses: tailscale/github-action@v2
         with:
@@ -21,21 +18,16 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:k8s-deploy
           version: 1.72.1
-          hostname: kreat8s-deploy 
-          
+          hostname: kreat8s-deploy
       - name: Install kubectl
         uses: Azure/setup-kubectl@v4.0.0
-
       - name: Install Helm
         uses: Azure/setup-helm@v4.2.0
-
       - name: Add kubeconfig
         env:
           KUBECTLCONFFULL: ${{ secrets.KUBECONFIG }}
         run: |
-            mkdir -p $HOME/.kube
-            echo "$KUBECTLCONFFULL" > $HOME/.kube/config
-
+          mkdir -p $HOME/.kube
+          echo "$KUBECTLCONFFULL" > $HOME/.kube/config
       - name: Run Kustomize
-        run: |
-          kubectl kustomize --enable-helm | kubectl apply -f - 
+        run: "kubectl kustomize --enable-helm | kubectl apply -f - \n"

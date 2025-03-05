@@ -32,7 +32,7 @@ spec:
           #- --entryPoints.web.forwardedHeaders.insecure
           #- --log.level=DEBUG
           #- --serverstransport.insecureskipverify=true
-        
+
         experimental:
           plugins:
             cloudflaregate:

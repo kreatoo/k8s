@@ -11,4 +11,3 @@ spec:
       storage: 100Gi
   storageClassName: local-storage
   volumeName: binrepo
-

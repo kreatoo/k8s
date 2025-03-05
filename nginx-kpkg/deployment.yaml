@@ -15,12 +15,12 @@ spec:
         app: webserver
     spec:
       containers:
-      - image: "nginx:latest"
-        name: webserver
-        volumeMounts:
-        - mountPath: /usr/share/nginx/html
-          name: binrepo-v
+        - image: "nginx:latest"
+          name: webserver
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html
+              name: binrepo-v
       volumes:
         - name: binrepo-v
           persistentVolumeClaim:
-            claimName: pvc 
+            claimName: pvc
