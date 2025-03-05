@@ -1,7 +1,7 @@
 name: Deploy
 on:
   workflow_run:
-    workflows: ["YAML Lint"]
+    workflows: ["YAML Format and Lint"]
     types:
       - completed
 jobs:
