@@ -14,6 +14,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v2
+      - name: Install yamlfmt
+        run: go install github.com/google/yamlfmt/cmd/yamlfmt@latest
       - name: Format YAML files
         run: |
           find . -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 yamlfmt -w
