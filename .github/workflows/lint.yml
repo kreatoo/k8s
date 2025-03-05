@@ -20,6 +20,7 @@ jobs:
         run: go install github.com/google/yamlfmt/cmd/yamlfmt@latest
       - name: Format YAML files
         run: |
+          export PATH=~/.go/bin:$PATH
           find . -type f \( -name "*.yaml" -o -name "*.yml" \) -print0 | xargs -0 yamlfmt -w
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
