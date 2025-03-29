@@ -1,5 +1,0 @@
-resources:
-  - namespace.yaml
-  - nextcloud-db.yaml
-  - app.yaml
-  - ingressroute.yaml
