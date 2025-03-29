@@ -1,4 +1,3 @@
----
 # Only restrict access to the database pods, not all pods in the namespace
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -11,13 +10,13 @@ spec:
     matchLabels:
       cnpg.io/cluster: mastodon-db
   policyTypes:
-  - Ingress
+    - Ingress
   ingress:
-  - from:
-    # Allow traffic only from within the same namespace
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: mastodon
+    - from:
+        # Allow traffic only from within the same namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: mastodon
 ---
 # Allow ingress traffic to application pods from Traefik
 apiVersion: networking.k8s.io/v1
@@ -31,10 +30,10 @@ spec:
     matchExpressions:
       - {key: app, operator: In, values: [web, streaming]}
   policyTypes:
-  - Ingress
+    - Ingress
   ingress:
-  - from:
-    # Allow traffic from Traefik namespace
-    - namespaceSelector:
-        matchLabels:
-          kubernetes.io/metadata.name: traefik
+    - from:
+        # Allow traffic from Traefik namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
