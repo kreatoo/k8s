@@ -9,7 +9,8 @@ on:
       - '**/*.yaml'
       - '**/*.yml'
 
-permissions: write-all
+permissions:
+  contents: write
 
 jobs:
   lint:
@@ -25,6 +26,7 @@ jobs:
         run: |
           export PATH=$PATH:$HOME/go/bin
           yamlfmt .
+          git restore .github/workflows
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
