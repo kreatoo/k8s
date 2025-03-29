@@ -66,12 +66,34 @@ jobs:
           
           # Skip main kustomization as it depends on sub-components
 
+
       - name: Validate with kubeconform
         run: |
           echo "Running schema validation with kubeconform..."
           if [ -n "$(ls -A .manifests)" ]; then
-            kubeconform -summary -skip CertificateRequest,Certificate,ClusterIssuer,Issuer,Application,IGWJob,IPAddressPool,L2Advertisement -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' .manifests/*.yaml || 
-            echo "Schema validation produced warnings"
+            # Download common CRD schemas to a local directory
+            mkdir -p .crds
+
+            # Download Argo CD CRDs
+            echo "Downloading Argo CD CRDs..."
+            curl -s -L https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/crds/application-crd.yaml -o .crds/application-crd.yaml
+            curl -s -L https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/crds/appproject-crd.yaml -o .crds/appproject-crd.yaml
+            curl -s -L https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/crds/applicationset-crd.yaml -o .crds/applicationset-crd.yaml
+      
+            # Download cert-manager CRDs
+            echo "Downloading cert-manager CRDs..."
+            curl -s -L https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.crds.yaml -o .crds/cert-manager-crds.yaml
+      
+            # Download Traefik CRDs
+            echo "Downloading Traefik CRDs..."
+            curl -s -L https://raw.githubusercontent.com/traefik/traefik/v2.10/docs/content/reference/dynamic-configuration/kubernetes-crd-definition-v1.yml -o .crds/traefik-crds.yaml
+      
+            # Run kubeconform with multiple schema sources
+            kubeconform -summary -output json \
+                      -schema-location default \
+                      -schema-location .crds \
+                      -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
+                      .manifests/*.yaml || echo "Schema validation produced warnings"
           else
             echo "No manifests to validate"
           fi
