@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "kubernetes": {
+    "fileMatch": [".+\\.yaml$", "kustomization\\.yaml$"]
+  },
+  "regexManagers": [
+    {
+      "fileMatch": ["mastodon/kustomization\\.yaml$"],
+      "matchStrings": [
+        "newTag:\\s+(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)"
+      ],
+      "depNameTemplate": "ghcr.io/mastodon/mastodon",
+      "datasourceTemplate": "github-releases",
+      "packageNameTemplate": "mastodon/mastodon"
+    },
+    {
+      "fileMatch": ["mastodon/kustomization\\.yaml$"],
+      "matchStrings": [
+        "newTag:\\s+(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)"
+      ],
+      "depNameTemplate": "ghcr.io/mastodon/mastodon-streaming",
+      "datasourceTemplate": "github-releases",
+      "packageNameTemplate": "mastodon/mastodon"
+    }
+  ]
+}
