@@ -8,6 +8,11 @@ on:
     paths:
       - '**/*.yaml'
       - '**/*.yml'
+
+permissions:
+  contents: write
+  workflows: write
+
 jobs:
   lint:
     runs-on: ubuntu-latest
