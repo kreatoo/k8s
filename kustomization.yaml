@@ -6,9 +6,9 @@ resources:
   - nginx-kpkg/
   - longhorn/
   - mastodon/
-  #- gha-runner/
   - jellyfin/
-  #- forgejo/
   - gatus/
   - answers/
+  #- forgejo/
+  #- gha-runner/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details
