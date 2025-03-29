@@ -59,6 +59,12 @@ spec:
                 interval: 60s
                 conditions:
                   - "[STATUS] == 403"
+              - name: "mastodon"
+                group: "infra"
+                url: "https://social.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
               - name: "mirror"
                 group: "infra"
                 url: "https://mirror.kreato.dev"
