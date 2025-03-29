@@ -9,8 +9,7 @@ on:
       - '**/*.yaml'
       - '**/*.yml'
 
-permissions:
-  contents: write
+permissions: write-all
 
 jobs:
   lint:
