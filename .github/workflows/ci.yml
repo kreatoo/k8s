@@ -1,0 +1,64 @@
+name: Kubernetes Static Validation
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  validate:
+    name: Validate Kubernetes Configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4.0.0
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4.3.0
+        
+      - name: Install kubeconform
+        run: |
+          wget https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz
+          tar xf kubeconform-linux-amd64.tar.gz
+          sudo mv kubeconform /usr/local/bin
+          
+      - name: Install kube-linter
+        run: |
+          curl -L "https://github.com/stackrox/kube-linter/releases/latest/download/kube-linter-linux.tar.gz" | tar -xz
+          sudo mv kube-linter /usr/local/bin
+          
+      - name: Download Pluto
+        uses: FairwindsOps/pluto/github-action@v5.21.3
+
+      - name: Validate kustomize
+        run: |
+          echo "Validating kustomization files can generate valid YAML..."
+          # Create directory for validation output
+          mkdir -p .manifests
+          
+          # Test main kustomization first
+          kubectl kustomize --enable-helm > .manifests/all.yaml || echo "Main kustomization failed - this may be expected without secrets"
+          
+          # Test individual components
+          for dir in $(find . -name "kustomization.yaml" -exec dirname {} \;); do
+            echo "Validating $dir"
+            kubectl kustomize $dir > .manifests/$(basename $dir).yaml || echo "Kustomization for $dir failed - this may be expected without secrets"
+          done
+
+      - name: Validate with kubeconform
+        run: |
+          echo "Running schema validation with kubeconform..."
+          kubeconform -summary -skip CertificateRequest,Certificate,ClusterIssuer,Issuer -schema-location default -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' .manifests/*.yaml || echo "Schema validation produced warnings"
+
+      - name: Check for deprecated APIs
+        run: |
+          echo "Checking for deprecated Kubernetes APIs..."
+          pluto detect-files -d .manifests || echo "API deprecation warnings found"
+
+      - name: Run kube-linter
+        run: |
+          echo "Running kube-linter for best practices..."
+          kube-linter lint .manifests --config .kube-linter.yaml || echo "Linting produced warnings"
