@@ -1,14 +1,20 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "kubernetes": {
-    "fileMatch": [".+\\.yaml$", "kustomization\\.yaml$"]
+    "fileMatch": [
+      ".+\\.yaml$",
+      "kustomization\\.yaml$"
+    ]
   },
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["mastodon/kustomization\\.yaml$"],
+      "customType": "regex",
+      "fileMatch": [
+        "mastodon/kustomization\\.yaml$"
+      ],
       "matchStrings": [
         "newTag:\\s+(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)"
       ],
@@ -17,7 +23,10 @@
       "packageNameTemplate": "mastodon/mastodon"
     },
     {
-      "fileMatch": ["mastodon/kustomization\\.yaml$"],
+      "customType": "regex",
+      "fileMatch": [
+        "mastodon/kustomization\\.yaml$"
+      ],
       "matchStrings": [
         "newTag:\\s+(?<currentValue>v[0-9]+\\.[0-9]+\\.[0-9]+)"
       ],
