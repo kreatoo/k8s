@@ -13,7 +13,8 @@ spec:
       values: |
         auth:
           enabled: false
-        architecture: standalone
+        replica:
+          replicaCount: 3
   destination:
     server: https://kubernetes.default.svc
     namespace: mastodon

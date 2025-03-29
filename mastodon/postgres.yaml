@@ -4,7 +4,7 @@ metadata:
   name: mastodon-db
   namespace: mastodon
 spec:
-  instances: 1
+  instances: 3
   primaryUpdateStrategy: unsupervised
   bootstrap:
     initdb:
