@@ -15,15 +15,15 @@ spec:
     spec:
       serviceAccountName: mastodon-migration-checker
       initContainers:
-      - name: wait-for-migrations
-        image: bitnami/kubectl:latest
-        command:
-        - /bin/sh
-        - -c
-        - |
-          echo "Waiting for database migrations to complete..."
-          kubectl wait --for=condition=complete --timeout=300s job/mastodon-db-migrate -n mastodon
-          echo "Migrations completed successfully!"
+        - name: wait-for-migrations
+          image: bitnami/kubectl:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Waiting for database migrations to complete..."
+              kubectl wait --for=condition=complete --timeout=300s job/mastodon-db-migrate -n mastodon
+              echo "Migrations completed successfully!"
       containers:
         - args:
             - node

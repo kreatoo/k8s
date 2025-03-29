@@ -10,9 +10,9 @@ metadata:
   name: job-watcher
   namespace: mastodon
 rules:
-- apiGroups: ["batch"]
-  resources: ["jobs"]
-  verbs: ["get", "watch", "list"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -20,9 +20,9 @@ metadata:
   name: mastodon-job-watcher
   namespace: mastodon
 subjects:
-- kind: ServiceAccount
-  name: mastodon-migration-checker
-  namespace: mastodon
+  - kind: ServiceAccount
+    name: mastodon-migration-checker
+    namespace: mastodon
 roleRef:
   kind: Role
   name: job-watcher

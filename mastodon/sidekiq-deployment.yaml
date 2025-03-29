@@ -17,162 +17,162 @@ spec:
     spec:
       serviceAccountName: mastodon-migration-checker
       initContainers:
-      - name: wait-for-migrations
-        image: bitnami/kubectl:latest
-        command:
-        - /bin/sh
-        - -c
-        - |
-          echo "Waiting for database migrations to complete..."
-          kubectl wait --for=condition=complete --timeout=300s job/mastodon-db-migrate -n mastodon
-          echo "Migrations completed successfully!"
-      - name: fix-permissions
-        image: alpine:latest
-        command:
-        - /bin/sh
-        - -c
-        - |
-          echo "Setting correct permissions on public/system directory..."
-          mkdir -p /mastodon/public/system/cache
-          chmod -R 777 /mastodon/public/system
-          echo "Permissions set successfully!"
-        volumeMounts:
-        - mountPath: /mastodon/public/system
-          name: mastodon-main
-      containers:
-      - name: sidekiq
-        image: ghcr.io/mastodon/mastodon
-        args:
-        - bundle
-        - exec
-        - sidekiq
-        env:
-        - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
-          valueFrom:
-            secretKeyRef:
-              key: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
-              name: production
-        - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
-          valueFrom:
-            secretKeyRef:
-              key: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
-              name: production
-        - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
-          valueFrom:
-            secretKeyRef:
-              key: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
-              name: production
-        - name: DB_HOST
-          value: mastodon-db-rw
-        - name: DB_NAME
-          value: mastodon
-        - name: DB_PASS
-          valueFrom:
-            secretKeyRef:
-              name: production
-              key: password
-        - name: DB_PORT
-          value: "5432"
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: production
-              key: username
-        - name: ES_ENABLED
-          valueFrom:
-            configMapKeyRef:
-              key: ES_ENABLED
-              name: production
-        - name: ES_HOST
-          valueFrom:
-            secretKeyRef:
-              key: ES_HOST
-              name: production
-        - name: ES_PASS
-          valueFrom:
-            secretKeyRef:
-              key: ES_PASS
-              name: production
-        - name: ES_PORT
-          valueFrom:
-            secretKeyRef:
-              key: ES_PORT
-              name: production
-        - name: ES_USER
-          valueFrom:
-            secretKeyRef:
-              key: ES_USER
-              name: production
-        - name: FETCH_REPLIES_COOLDOWN_MINUTES
-          valueFrom:
-            configMapKeyRef:
-              key: FETCH_REPLIES_COOLDOWN_MINUTES
-              name: production
-        - name: FETCH_REPLIES_ENABLED
-          valueFrom:
-            configMapKeyRef:
-              key: FETCH_REPLIES_ENABLED
-              name: production
-        - name: FETCH_REPLIES_INITIAL_WAIT_MINUTES
-          valueFrom:
-            configMapKeyRef:
-              key: FETCH_REPLIES_INITIAL_WAIT_MINUTES
-              name: production
-        - name: FETCH_REPLIES_MAX_GLOBAL
-          valueFrom:
-            configMapKeyRef:
-              key: FETCH_REPLIES_MAX_GLOBAL
-              name: production
-        - name: FETCH_REPLIES_MAX_PAGES
-          valueFrom:
-            configMapKeyRef:
-              key: FETCH_REPLIES_MAX_PAGES
-              name: production
-        - name: FETCH_REPLIES_MAX_SINGLE
-          valueFrom:
-            configMapKeyRef:
-              key: FETCH_REPLIES_MAX_SINGLE
-              name: production
-        - name: IP_RETENTION_PERIOD
-          valueFrom:
-            configMapKeyRef:
-              key: IP_RETENTION_PERIOD
-              name: production
-        - name: LOCAL_DOMAIN
-          valueFrom:
-            configMapKeyRef:
-              key: LOCAL_DOMAIN
-              name: production
-        - name: OTP_SECRET
-          valueFrom:
-            secretKeyRef:
-              key: OTP_SECRET
-              name: production
-        - name: REDIS_HOST
-          value: valkey-primary
-        - name: REDIS_PORT
-          value: "6379"
-        - name: SECRET_KEY_BASE
-          valueFrom:
-            secretKeyRef:
-              key: SECRET_KEY_BASE
-              name: production
-        - name: SESSION_RETENTION_PERIOD
-          valueFrom:
-            configMapKeyRef:
-              key: SESSION_RETENTION_PERIOD
-              name: production
-        livenessProbe:
-          exec:
-            command:
-            - sh
+        - name: wait-for-migrations
+          image: bitnami/kubectl:latest
+          command:
+            - /bin/sh
             - -c
-            - "ps aux | grep '[s]idekiq' || exit 1"
-        volumeMounts:
-        - mountPath: /mastodon/public/system
-          name: mastodon-main
+            - |
+              echo "Waiting for database migrations to complete..."
+              kubectl wait --for=condition=complete --timeout=300s job/mastodon-db-migrate -n mastodon
+              echo "Migrations completed successfully!"
+        - name: fix-permissions
+          image: alpine:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Setting correct permissions on public/system directory..."
+              mkdir -p /mastodon/public/system/cache
+              chmod -R 777 /mastodon/public/system
+              echo "Permissions set successfully!"
+          volumeMounts:
+            - mountPath: /mastodon/public/system
+              name: mastodon-main
+      containers:
+        - name: sidekiq
+          image: ghcr.io/mastodon/mastodon
+          args:
+            - bundle
+            - exec
+            - sidekiq
+          env:
+            - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+                  name: production
+            - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+              valueFrom:
+                secretKeyRef:
+                  key: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+                  name: production
+            - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+                  name: production
+            - name: DB_HOST
+              value: mastodon-db-rw
+            - name: DB_NAME
+              value: mastodon
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: production
+                  key: password
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: production
+                  key: username
+            - name: ES_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: ES_ENABLED
+                  name: production
+            - name: ES_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: ES_HOST
+                  name: production
+            - name: ES_PASS
+              valueFrom:
+                secretKeyRef:
+                  key: ES_PASS
+                  name: production
+            - name: ES_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: ES_PORT
+                  name: production
+            - name: ES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: ES_USER
+                  name: production
+            - name: FETCH_REPLIES_COOLDOWN_MINUTES
+              valueFrom:
+                configMapKeyRef:
+                  key: FETCH_REPLIES_COOLDOWN_MINUTES
+                  name: production
+            - name: FETCH_REPLIES_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: FETCH_REPLIES_ENABLED
+                  name: production
+            - name: FETCH_REPLIES_INITIAL_WAIT_MINUTES
+              valueFrom:
+                configMapKeyRef:
+                  key: FETCH_REPLIES_INITIAL_WAIT_MINUTES
+                  name: production
+            - name: FETCH_REPLIES_MAX_GLOBAL
+              valueFrom:
+                configMapKeyRef:
+                  key: FETCH_REPLIES_MAX_GLOBAL
+                  name: production
+            - name: FETCH_REPLIES_MAX_PAGES
+              valueFrom:
+                configMapKeyRef:
+                  key: FETCH_REPLIES_MAX_PAGES
+                  name: production
+            - name: FETCH_REPLIES_MAX_SINGLE
+              valueFrom:
+                configMapKeyRef:
+                  key: FETCH_REPLIES_MAX_SINGLE
+                  name: production
+            - name: IP_RETENTION_PERIOD
+              valueFrom:
+                configMapKeyRef:
+                  key: IP_RETENTION_PERIOD
+                  name: production
+            - name: LOCAL_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  key: LOCAL_DOMAIN
+                  name: production
+            - name: OTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: OTP_SECRET
+                  name: production
+            - name: REDIS_HOST
+              value: valkey-primary
+            - name: REDIS_PORT
+              value: "6379"
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  key: SECRET_KEY_BASE
+                  name: production
+            - name: SESSION_RETENTION_PERIOD
+              valueFrom:
+                configMapKeyRef:
+                  key: SESSION_RETENTION_PERIOD
+                  name: production
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "ps aux | grep '[s]idekiq' || exit 1"
+          volumeMounts:
+            - mountPath: /mastodon/public/system
+              name: mastodon-main
       restartPolicy: Always
       volumes:
-      - name: mastodon-main
-        persistentVolumeClaim:
-          claimName: mastodon-main
+        - name: mastodon-main
+          persistentVolumeClaim:
+            claimName: mastodon-main
