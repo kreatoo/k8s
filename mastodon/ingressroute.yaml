@@ -10,7 +10,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: Host(`social.kreato.dev`)
+      match: Host(`m.kreato.dev`)
       priority: 10
       services:
         - kind: Service
@@ -22,4 +22,4 @@ spec:
   tls:
     secretName: wildcard-kreato.dev-tls
     domains:
-      - main: social.kreato.dev
+      - main: m.kreato.dev

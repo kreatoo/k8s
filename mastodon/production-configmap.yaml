@@ -9,8 +9,8 @@ data:
   FETCH_REPLIES_MAX_SINGLE: "500"
   IP_RETENTION_PERIOD: "31556952"
   SESSION_RETENTION_PERIOD: "31556952"
-  LOCAL_DOMAIN: "kreato.dev"
-  WEB_DOMAIN: "social.kreato.dev"
+  LOCAL_DOMAIN: "m.kreato.dev"
+  WEB_DOMAIN: "m.kreato.dev"
 kind: ConfigMap
 metadata:
   name: production
