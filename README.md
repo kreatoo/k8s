@@ -49,6 +49,7 @@ graph TD;
 
 ### Components
 * GitHub Actions - Deployment pipeline
+* Renovate - Dependency updates
 * ArgoCD - For GitOps, manages all the deployments (except itself and the CNI)
 * MetalLB - Load balancer, network policies
 * cert-manager - For managing certificates
