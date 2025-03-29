@@ -39,5 +39,8 @@ jobs:
           MASTODONENV: ${{ secrets.MASTODONENV }}
         run: |
           echo "$MASTODONENV" > mastodon/.env
+      - name: Add hack for immutable jobs
+        run: |
+          kubectl delete -n mastodon job --all
       - name: Run Kustomize
         run: "kubectl kustomize --enable-helm | kubectl apply -f - \n"
