@@ -1,0 +1,12 @@
+checks:
+  addAllBuiltIn: true
+  exclude:
+    - "no-node-affinity"
+    - "unset-cpu-requirements"
+    - "unset-memory-requirements"
+    - "no-read-only-root-fs"
+    - "privilege-escalation"
+    - "no-anti-affinity"
+    - "no-rolling-update-strategy"
+    - "non-existent-service-account"
+    - "dangling-service"
