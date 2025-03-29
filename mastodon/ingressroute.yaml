@@ -1,0 +1,25 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: mastodon
+  namespace: mastodon
+  annotations:
+    cert-manager.io/cluster-issuer: mainissuer
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`social.kreato.dev`)
+      priority: 10
+      services:
+        - kind: Service
+          name: web
+          namespace: mastodon
+          passHostHeader: true
+          port: 3000
+          scheme: http
+  tls:
+    secretName: wildcard-kreato.dev-tls
+    domains:
+      - main: social.kreato.dev

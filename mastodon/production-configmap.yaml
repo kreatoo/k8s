@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  ES_ENABLED: "false"
+  FETCH_REPLIES_COOLDOWN_MINUTES: "15"
+  FETCH_REPLIES_ENABLED: "false"
+  FETCH_REPLIES_INITIAL_WAIT_MINUTES: "5"
+  FETCH_REPLIES_MAX_GLOBAL: "1000"
+  FETCH_REPLIES_MAX_PAGES: "500"
+  FETCH_REPLIES_MAX_SINGLE: "500"
+  IP_RETENTION_PERIOD: "31556952"
+  SESSION_RETENTION_PERIOD: "31556952"
+  LOCAL_DOMAIN: "kreato.dev"
+  WEB_DOMAIN: "social.kreato.dev"
+kind: ConfigMap
+metadata:
+  name: production
+  namespace: mastodon

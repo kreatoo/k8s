@@ -1,0 +1,96 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mastodon-db-migrate
+  namespace: mastodon
+spec:
+  backoffLimit: 5  # Retry up to 5 times
+  ttlSecondsAfterFinished: 86400  # Auto-delete after 24 hours
+  template:
+    spec:
+      initContainers:
+      - name: wait-for-db
+        image: postgres:15-alpine
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Waiting for database to be ready..."
+          until pg_isready -h mastodon-db-rw -p 5432 -U $DB_USER; do
+            echo "Database not ready yet, retrying in 5 seconds..."
+            sleep 5
+          done
+          echo "Database is ready!"
+        env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: production
+              key: password
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: production
+              key: username
+      containers:
+      - name: db-migrate
+        image: ghcr.io/mastodon/mastodon
+        command:
+        - /bin/bash
+        - -c
+        - |
+          echo "Starting migration job..."
+          echo "Database info: Host=$DB_HOST, DB=$DB_NAME, User=$DB_USER"
+          echo "Redis info: Host=$REDIS_HOST, Port=$REDIS_PORT"
+          echo "Running migrations directly..."
+          RAILS_ENV=production bundle exec rails db:migrate || exit 1
+          echo "Migrations completed successfully!"
+        env:
+        - name: DB_HOST
+          value: mastodon-db-rw
+        - name: DB_NAME
+          value: mastodon
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: production
+              key: username
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: production
+              key: password
+        - name: DB_PORT
+          value: "5432"
+        - name: RAILS_ENV
+          value: production
+        - name: REDIS_HOST
+          value: valkey-primary
+        - name: REDIS_PORT
+          value: "6379"
+        - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+          valueFrom:
+            secretKeyRef:
+              key: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY
+              name: production
+        - name: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+          valueFrom:
+            secretKeyRef:
+              key: ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT
+              name: production
+        - name: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+          valueFrom:
+            secretKeyRef:
+              key: ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY
+              name: production
+        - name: SECRET_KEY_BASE
+          valueFrom:
+            secretKeyRef:
+              key: SECRET_KEY_BASE
+              name: production
+        - name: OTP_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: OTP_SECRET
+              name: production
+      restartPolicy: OnFailure

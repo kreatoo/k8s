@@ -23,11 +23,25 @@ jobs:
         uses: Azure/setup-kubectl@v4.0.0
       - name: Install Helm
         uses: Azure/setup-helm@v4.2.0
+
       - name: Add kubeconfig
         env:
           KUBECTLCONFFULL: ${{ secrets.KUBECONFIG }}
         run: |
           mkdir -p $HOME/.kube
           echo "$KUBECTLCONFFULL" > $HOME/.kube/config
+
+      - name: Add .env (cert-manager)
+        env:
+          CERTMANAGERENV: ${{ secrets.CERTMANAGERENV }}
+        run: |
+          echo "$CERTMANAGERENV" > cert-manager/.env
+
+      - name: Add .env (mastodon)
+        env:
+          MASTODONENV: ${{ secrets.MASTODONENV }}
+        run: |
+          echo "$MASTODONENV" > mastodon/.env
+
       - name: Run Kustomize
         run: "kubectl kustomize --enable-helm | kubectl apply -f - \n"

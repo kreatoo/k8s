@@ -5,10 +5,10 @@ resources:
   - traefik/
   - nginx-kpkg/
   - longhorn/
+  - mastodon/
   #- gha-runner/
   - jellyfin/
   #- forgejo/
   - gatus/
   - answers/
-  #- nextcloud/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details

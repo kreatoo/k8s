@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mastodon-migration-checker
+  namespace: mastodon
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: job-watcher
+  namespace: mastodon
+rules:
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mastodon-job-watcher
+  namespace: mastodon
+subjects:
+- kind: ServiceAccount
+  name: mastodon-migration-checker
+  namespace: mastodon
+roleRef:
+  kind: Role
+  name: job-watcher
+  apiGroup: rbac.authorization.k8s.io
