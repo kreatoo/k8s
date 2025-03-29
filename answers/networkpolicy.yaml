@@ -1,0 +1,40 @@
+---
+# Only restrict access to the database pods, not all pods in the namespace
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: protect-answer-db
+  namespace: answer
+spec:
+  # Select only the database pods
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: answer-postgresql
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    # Allow traffic only from within the same namespace
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: answer
+---
+# Allow ingress traffic to application pods from Traefik
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-app
+  namespace: answer
+spec:
+  # Select the application pods
+  podSelector:
+    matchLabels:
+      app: answer
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    # Allow traffic from Traefik namespace
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: traefik

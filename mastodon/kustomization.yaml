@@ -13,6 +13,7 @@ resources:
   - streaming-service.yaml
   - web-deployment.yaml
   - web-service.yaml
+  - networkpolicy.yaml
 secretGenerator:
   - name: production
     namespace: mastodon
