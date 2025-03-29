@@ -1,7 +1,7 @@
 name: Deploy
 on:
   workflow_run:
-    workflows: ["YAML Format and Lint"]
+    workflows: ["YAML Format and Lint", "Kubernetes Static Validation"]
     types:
       - completed
 jobs:
