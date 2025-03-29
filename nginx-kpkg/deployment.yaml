@@ -15,7 +15,7 @@ spec:
         app: webserver
     spec:
       containers:
-        - image: "nginx:latest"
+        - image: "nginx:1.27.4"
           name: webserver
           volumeMounts:
             - mountPath: /usr/share/nginx/html
