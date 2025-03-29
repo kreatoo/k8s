@@ -10,3 +10,5 @@ checks:
     - "no-rolling-update-strategy"
     - "non-existent-service-account"
     - "dangling-service"
+    - "mismatching-selector"
+    - "env-var-secret"

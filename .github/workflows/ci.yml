@@ -55,16 +55,12 @@ jobs:
               echo "Validating $dir"
               # Use --enable-helm for directories that need it
               if [[ "$dir" == "./argocd" || "$dir" == "./traefik" || "$dir" == "./cert-manager" ]]; then
-                kubectl kustomize --enable-helm $dir > .manifests/$(basename $dir).yaml || 
-                echo "Kustomization for $dir failed - expected without chart repos"
+                kubectl kustomize --enable-helm $dir > .manifests/$(basename $dir).yaml
               else
-                kubectl kustomize $dir > .manifests/$(basename $dir).yaml || 
-                echo "Kustomization for $dir failed - may be expected without secrets"
+                kubectl kustomize $dir > .manifests/$(basename $dir).yaml
               fi
             fi
           done
-          
-          # Skip main kustomization as it depends on sub-components
 
       - name: Validate with kubeconform
         run: |
@@ -92,25 +88,29 @@ jobs:
               -schema-location default \
               -schema-location .crds \
               -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
-              .manifests/*.yaml || echo "Schema validation produced warnings"
+              .manifests/*.yaml
           else
             echo "No manifests to validate"
+            exit 1
           fi
 
       - name: Check for deprecated APIs
         run: |
           echo "Checking for deprecated Kubernetes APIs..."
           if [ -n "$(ls -A .manifests)" ]; then
-            pluto detect-files -d .manifests || echo "API deprecation warnings found"
+            pluto detect-files -d .manifests
           else
             echo "No manifests to check for deprecated APIs"
+            exit 1
           fi
 
+      - name: Clean up manifests
+        run: |
+          echo "Cleaning up manifests directory..."
+          rm -rf .manifests
+          
       - name: Run kube-linter
         run: |
           echo "Running kube-linter for best practices..."
-          if [ -n "$(ls -A .manifests)" ]; then
-            kube-linter lint .manifests --config .kube-linter.yaml || echo "Linting produced warnings"
-          else
-            echo "No manifests to lint"
-          fi
+          # Run kube-linter directly on the repository files
+          kube-linter lint . --config .kube-linter.yaml || echo "Linting produced warnings"
