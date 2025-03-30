@@ -13,4 +13,4 @@ spec:
       secret:
         name: production
   storage:
-    size: 1Gi
+    size: 10Gi
