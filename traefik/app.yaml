@@ -14,7 +14,7 @@ spec:
     helm:
       values: |
         deployment:
-          replicas: 3
+          replicas: 2
 
         ports:
           websecure:
@@ -32,12 +32,6 @@ spec:
           #- --entryPoints.web.forwardedHeaders.insecure
           #- --log.level=DEBUG
           #- --serverstransport.insecureskipverify=true
-
-        experimental:
-          plugins:
-            cloudflaregate:
-              moduleName: github.com/sstoner/cloudflaregate
-              version: v1.1.2
 
         tlsStore:
           default:
