@@ -30,7 +30,7 @@ jobs:
           echo "  name: cloudflare" >> traefik/cloudflare-middleware.yaml.new
           echo "  namespace: traefik" >> traefik/cloudflare-middleware.yaml.new
           echo "spec:" >> traefik/cloudflare-middleware.yaml.new
-          echo "  ipWhiteList:" >> traefik/cloudflare-middleware.yaml.new
+          echo "  ipAllowList:" >> traefik/cloudflare-middleware.yaml.new
           echo "    sourceRange:" >> traefik/cloudflare-middleware.yaml.new
           
           # Add IPv4 ranges
@@ -42,9 +42,6 @@ jobs:
           for ip in $(echo "$CF_IPS" | jq -r '.result.ipv6_cidrs[]'); do
             echo "      - \"$ip\"" >> traefik/cloudflare-middleware.yaml.new
           done
-          
-          # Add Tailscale IP range (keeping this from the original middleware)
-          echo "      - \"100.64.0.0/10\" # Tailscale" >> traefik/cloudflare-middleware.yaml.new
           
           # Check if there are changes
           if cmp -s traefik/cloudflare-middleware.yaml.new traefik/cloudflare-middleware.yaml; then
