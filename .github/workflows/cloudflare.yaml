@@ -1,0 +1,70 @@
+name: Update Cloudflare IP Ranges
+on:
+  schedule:
+    # Run daily at midnight UTC
+    - cron: '0 0 * * *'
+  # Allow manual triggering
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-cloudflare-ips:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch Cloudflare IP ranges
+        id: fetch-ips
+        run: |
+          # Fetch Cloudflare IP ranges (IPv4 and IPv6)
+          echo "Fetching Cloudflare IP ranges..."
+          CF_IPS=$(curl -s https://api.cloudflare.com/client/v4/ips)
+          
+          # Create the middleware YAML file
+          echo "apiVersion: traefik.io/v1alpha1" > traefik/cloudflare-middleware.yaml.new
+          echo "kind: Middleware" >> traefik/cloudflare-middleware.yaml.new
+          echo "metadata:" >> traefik/cloudflare-middleware.yaml.new
+          echo "  name: cloudflare" >> traefik/cloudflare-middleware.yaml.new
+          echo "  namespace: traefik" >> traefik/cloudflare-middleware.yaml.new
+          echo "spec:" >> traefik/cloudflare-middleware.yaml.new
+          echo "  ipWhiteList:" >> traefik/cloudflare-middleware.yaml.new
+          echo "    sourceRange:" >> traefik/cloudflare-middleware.yaml.new
+          
+          # Add IPv4 ranges
+          for ip in $(echo "$CF_IPS" | jq -r '.result.ipv4_cidrs[]'); do
+            echo "      - \"$ip\"" >> traefik/cloudflare-middleware.yaml.new
+          done
+          
+          # Add IPv6 ranges
+          for ip in $(echo "$CF_IPS" | jq -r '.result.ipv6_cidrs[]'); do
+            echo "      - \"$ip\"" >> traefik/cloudflare-middleware.yaml.new
+          done
+          
+          # Add Tailscale IP range (keeping this from the original middleware)
+          echo "      - \"100.64.0.0/10\" # Tailscale" >> traefik/cloudflare-middleware.yaml.new
+          
+          # Check if there are changes
+          if cmp -s traefik/cloudflare-middleware.yaml.new traefik/cloudflare-middleware.yaml; then
+            echo "No changes to Cloudflare IP ranges."
+            rm traefik/cloudflare-middleware.yaml.new
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Cloudflare IP ranges have changed."
+            mv traefik/cloudflare-middleware.yaml.new traefik/cloudflare-middleware.yaml
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+          
+          # Print the middleware YAML
+          echo "Current middleware YAML:"
+          cat traefik/cloudflare-middleware.yaml
+
+      - name: Commit changes
+        if: steps.fetch-ips.outputs.has_changes == 'true'
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Update Cloudflare IP ranges'
+          add: 'traefik/cloudflare-middleware.yaml'
+          push: true
