@@ -14,7 +14,7 @@ spec:
     helm:
       values: |
         deployment:
-          replicas: 2
+          replicas: 3
 
         ports:
           websecure:
