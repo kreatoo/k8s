@@ -25,7 +25,7 @@ secretGenerator:
 images:
   - name: ghcr.io/mastodon/mastodon
     newName: ghcr.io/mastodon/mastodon
-    newTag: v4.3.6
+    newTag: v4.3.7
   - name: ghcr.io/mastodon/mastodon-streaming
     newName: ghcr.io/mastodon/mastodon-streaming
-    newTag: v4.3.6
+    newTag: v4.3.7
