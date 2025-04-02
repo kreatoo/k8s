@@ -26,16 +26,6 @@ spec:
               echo "Waiting for database migrations to complete..."
               kubectl wait --for=condition=complete --timeout=300s job/mastodon-db-migrate -n mastodon
               echo "Migrations completed successfully!"
-        - name: fix-permissions
-          image: alpine:latest
-          command:
-            - /bin/sh
-            - -c
-            - |
-              echo "Setting correct permissions on public/system directory..."
-              mkdir -p /mastodon/public/system/cache
-              chmod -R 777 /mastodon/public/system
-              echo "Permissions set successfully!"
           volumeMounts:
             - mountPath: /mastodon/public/system
               name: mastodon-main
