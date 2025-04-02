@@ -1,6 +1,7 @@
 resources:
   - namespace.yaml
   - app.yaml
+  - networkpolicy.yaml
 helmCharts:
   - name: argo-cd
     repo: https://argoproj.github.io/argo-helm

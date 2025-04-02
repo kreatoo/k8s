@@ -1,0 +1,19 @@
+# Allow ingress traffic to webserver from Traefik
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-webserver
+  namespace: nginx
+spec:
+  # Select the webserver pods
+  podSelector:
+    matchLabels:
+      app: webserver
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Allow traffic from Traefik namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik

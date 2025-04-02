@@ -1,0 +1,19 @@
+# Allow ingress traffic to Gatus from Traefik
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-gatus
+  namespace: gatus
+spec:
+  # Select the gatus pods
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: gatus
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Allow traffic from Traefik namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik

@@ -1,0 +1,40 @@
+# Allow ingress traffic to ArgoCD server from Traefik
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-argocd
+  namespace: argocd
+spec:
+  # Select the ArgoCD server pods
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-server
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Allow traffic from Traefik namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
+
+---
+# Protect ArgoCD repo server access
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: protect-argocd-repo-server
+  namespace: argocd
+spec:
+  # Select the ArgoCD repo server pods
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-repo-server
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Allow traffic only from within the same namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: argocd

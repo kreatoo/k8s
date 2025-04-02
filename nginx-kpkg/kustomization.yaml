@@ -2,6 +2,7 @@ resources:
   - namespace.yaml
   - deployment.yaml
   - ingressroute.yaml
+  - networkpolicy.yaml
   - pv.yaml
   - pvc.yaml
   - service.yaml

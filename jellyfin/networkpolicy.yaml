@@ -1,0 +1,19 @@
+# Allow ingress traffic to Jellyfin from Traefik
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-jellyfin
+  namespace: jellyfin
+spec:
+  # Select the jellyfin app pods
+  podSelector:
+    matchLabels:
+      app: jellyfin
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Allow traffic from Traefik namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik

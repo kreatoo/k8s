@@ -1,0 +1,40 @@
+# Allow ingress traffic to Longhorn UI from Traefik
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-traefik-to-longhorn
+  namespace: longhorn-system
+spec:
+  # Select the Longhorn frontend pods
+  podSelector:
+    matchLabels:
+      app: longhorn-ui
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Allow traffic from Traefik namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: traefik
+
+---
+# Protect Longhorn manager access
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: protect-longhorn-manager
+  namespace: longhorn-system
+spec:
+  # Select the Longhorn manager pods
+  podSelector:
+    matchLabels:
+      app: longhorn-manager
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        # Allow traffic only from within the same namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: longhorn-system
