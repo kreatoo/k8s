@@ -13,10 +13,21 @@ spec:
     - Ingress
   ingress:
     - from:
-        # Allow traffic only from within the same namespace
+        # Allow traffic from within the same namespace
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: mastodon
+    - from:
+        # Allow traffic from CNPG operator with specific pod selection
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cnpg-system
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cloudnative-pg
+      ports:
+        - port: 8000
+        - port: 5432
 ---
 # Allow ingress traffic to application pods from Traefik
 apiVersion: networking.k8s.io/v1
@@ -37,30 +48,3 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: traefik
----
-# Allow cnpg-system full access to database pods (both ingress and egress)
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: allow-cnpg-system-to-db
-  namespace: mastodon
-spec:
-  # Select the database pods
-  podSelector:
-    matchLabels:
-      cnpg.io/cluster: mastodon-db
-  policyTypes:
-    - Ingress
-    - Egress
-  ingress:
-    - from:
-        # Allow traffic from cnpg-system namespace
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: cnpg-system
-  egress:
-    - to:
-        # Allow traffic to cnpg-system namespace
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: cnpg-system
