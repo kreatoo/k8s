@@ -54,7 +54,8 @@ graph TD;
 * MetalLB - Load balancer, network policies
 * cert-manager - For managing certificates
 * Traefik - Ingress controller
-* CloudNativePG - PostgreSQL operator
+* CloudNativePG - Operator for PostgreSQL which powers most services
+* DragonflyDB Operator - Operator for DragonflyDB which powers most memory data stores in services
 * Answers - For my own Q&A platform (https://answers.kreato.dev)
 * Mastodon - For my own fediverse instance (https://m.kreato.dev)
 * Gatus - For health checks (https://status.kreato.dev)
