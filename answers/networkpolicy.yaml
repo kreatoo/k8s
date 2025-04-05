@@ -17,7 +17,6 @@ spec:
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: answer
-    
     - from:
         # Allow traffic from CNPG operator with specific pod selection
         - namespaceSelector:
