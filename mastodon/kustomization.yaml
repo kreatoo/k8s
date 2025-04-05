@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - postgres.yaml
-  - redis.yaml
+  - dragonfly.yaml
   - production-configmap.yaml
   - mastodon-main-pvc.yaml
   - rbac.yaml

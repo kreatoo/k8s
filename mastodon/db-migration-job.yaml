@@ -65,7 +65,7 @@ spec:
             - name: RAILS_ENV
               value: production
             - name: REDIS_HOST
-              value: valkey-primary
+              value: dragonfly-mastodon
             - name: REDIS_PORT
               value: "6379"
             - name: ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY

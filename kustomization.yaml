@@ -9,6 +9,7 @@ resources:
   - jellyfin/
   - gatus/
   - answers/
+  - dragonfly/
   #- forgejo/
   #- gha-runner/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details
