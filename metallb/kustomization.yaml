@@ -1,3 +1,8 @@
 resources:
   - ippool.yaml
-  - app.yaml
+helmCharts:
+  - name: metallb
+    repo: https://metallb.github.io/metallb
+    releaseName: metallb
+    version: 0.14.9
+    namespace: metallb-system
