@@ -37,8 +37,10 @@
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["mastodon/mastodon"],
-      "groupName": "mastodon"
+      "groupName": "mastodon",
+      "matchPackageNames": [
+        "/mastodon/mastodon/"
+      ]
     }
   ]
 }
