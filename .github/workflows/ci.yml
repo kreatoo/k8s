@@ -45,6 +45,9 @@ jobs:
             fi
           done
 
+          # Create generated_values.yaml for robusta
+          touch robusta/generated_values.yaml
+
       - name: Validate kustomize
         run: |
           echo "Validating kustomization files can generate valid YAML..."
