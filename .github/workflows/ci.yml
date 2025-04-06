@@ -46,7 +46,7 @@ jobs:
           done
 
           # Create generated_values.yaml for robusta
-          touch robusta/generated_values.yaml
+          mv robusta/generated_values.yaml.example robusta/generated_values.yaml
 
       - name: Validate kustomize
         run: |

@@ -1,0 +1,14 @@
+clusterName: bouquet # NOTE - adjust the clusterName when adding additional clusters
+globalConfig:
+  signing_key: ggg
+  account_id: ggg
+sinksConfig:
+  - discord_sink:
+      name: bouquet_sink
+      url: https://test.com 
+enablePrometheusStack: true
+enablePlatformPlaybooks: true
+runner:
+  sendAdditionalTelemetry: false
+enableHolmesGPT: false
+enabledManagedConfiguration: true
