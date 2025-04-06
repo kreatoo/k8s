@@ -56,7 +56,7 @@ jobs:
             if [ -f "$dir/kustomization.yaml" ]; then
               echo "Validating $dir"
               # Use --enable-helm for directories that need it
-              if [[ "$dir" == "./argocd" || "$dir" == "./traefik" || "$dir" == "./cert-manager" ]]; then
+              if [[ "$dir" == "./argocd" || "$dir" == "./traefik" || "$dir" == "./cert-manager" || "$dir" == "./robusta" ]]; then
                 kubectl kustomize --enable-helm $dir > .manifests/$(basename $dir).yaml
               else
                 kubectl kustomize $dir > .manifests/$(basename $dir).yaml
