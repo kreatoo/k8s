@@ -1,6 +1,5 @@
 resources:
   - namespace.yaml
-
 helmCharts:
   - name: robusta
     repo: https://robusta-charts.storage.googleapis.com
