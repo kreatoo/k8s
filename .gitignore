@@ -1,3 +1,4 @@
 **/.env
 charts/
+**/generated_values.yaml
 **/1password-credentials.json

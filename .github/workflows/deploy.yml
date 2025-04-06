@@ -39,6 +39,14 @@ jobs:
           MASTODONENV: ${{ secrets.MASTODONENV }}
         run: |
           echo "$MASTODONENV" > mastodon/.env
+      - name: Add generated_values.yaml (robusta)
+        env:
+          GENERATEDVALUES: ${{ secrets.GENERATED_VALUES }}
+        run: |
+          echo "$GENERATEDVALUES" > robusta/generated_values.yaml
+      - name: Run Kustomize (Robusta)
+        run: |
+          kubectl kustomize --enable-helm robusta/ | kubectl apply --server-side --force-conflicts -f -
       - name: Add hack for immutable jobs
         run: |
           kubectl delete -n mastodon job --all

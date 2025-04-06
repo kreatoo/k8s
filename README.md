@@ -61,7 +61,7 @@ graph TD;
 * Gatus - For health checks (https://status.kreato.dev)
 * Nginx-kpkg - for hosting a kpkg repository (https://bin.kreato.dev)
 * k0s - K8s distribution, has autopilot configured
-* Robusta - For alarms and monitoring (Unused at the moment, optional)
+* Robusta - For alarms and monitoring (optional)
 * Forgejo - For Git repositories (Disabled at the moment, optional)
 
 ## Installation
@@ -73,10 +73,10 @@ This setup uses Kustomize to manage the manifests. To install the setup, clone t
 kubectl kustomize --enable-helm | kubectl apply -f -
 ```
 
-Please keep in mind that Robusta is not included in the setup by default as you need to generate values for it. You can generate a config [here](https://platform.robusta.dev/signup?utm_source=docs) and then put it in the robusta/ folder. After that, you can run the command below (or uncomment robusta/ in kustomization.yaml) to install Robusta:
+Please keep in mind that Robusta is not included in the setup by default as you need to generate values for it. You can generate a config [here](https://platform.robusta.dev/signup?utm_source=docs) and then put it in the robusta/ folder. After that, you can run the command below to install Robusta:
 
 ```bash
-kubectl apply -k robusta/
+kubectl kustomize --enable-helm robusta/ | kubectl apply --server-side --force-conflicts -f -
 ```
 
 ## Credits
