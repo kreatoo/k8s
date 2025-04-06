@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/Aikoyori/ProgrammingVTuberLogos/main/Kubernetes/kubernetesLogo.png"  height="100">
 
-## kreat8s
-Kreato's Kubernetes setup
+## bouquet
+Kreato's Kubernetes cluster
 
 ![Load Balancer Uptime (7d)](https://status.kreato.dev/api/v1/endpoints/internal_lb/uptimes/7d/badge.svg) ![Load Balancer Uptime (24h)](https://status.kreato.dev/api/v1/endpoints/internal_lb/uptimes/24h/badge.svg) ![Load Balancer Uptime (1h)](https://status.kreato.dev/api/v1/endpoints/internal_lb/uptimes/1h/badge.svg)
 
