@@ -1,4 +1,9 @@
 resources:
-  - app.yaml
   - networkpolicy.yaml
   #  - ingressroute.yaml
+helmCharts:
+  - name: longhorn
+    repo: https://charts.longhorn.io/
+    releaseName: longhorn
+    version: 1.8.1
+    namespace: longhorn-system
