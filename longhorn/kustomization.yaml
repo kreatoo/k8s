@@ -1,5 +1,5 @@
-resources:
-  - networkpolicy.yaml
+#resources:
+  #- networkpolicy.yaml
   #  - ingressroute.yaml
 helmCharts:
   - name: longhorn
