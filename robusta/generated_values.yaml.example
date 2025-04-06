@@ -5,10 +5,32 @@ globalConfig:
 sinksConfig:
   - discord_sink:
       name: bouquet_sink
-      url: https://test.com 
+      url: https://test.com
 enablePrometheusStack: true
 enablePlatformPlaybooks: true
 runner:
   sendAdditionalTelemetry: false
 enableHolmesGPT: false
 enabledManagedConfiguration: true
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      retention: 1d
+      retentionSize: "2GB"
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            resources:
+              requests:
+                storage: 2Gi
+  alertManager:
+    alertManagerSpec:
+      storage:
+        volumeClaimTemplate:
+          spec:
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 1Gi
+
+
