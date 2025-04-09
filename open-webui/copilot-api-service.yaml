@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: copilot-api
+  name: copilot-api
+  namespace: open-webui
+spec:
+  ports:
+    - name: "4141"
+      port: 4141
+      targetPort: 4141
+  selector:
+    service: copilot-api

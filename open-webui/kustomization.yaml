@@ -1,0 +1,7 @@
+resources:
+  - namespace.yaml
+  - copilot-api-deployment.yaml
+  - copilot-api-service.yaml
+  - open-webui-data-persistentvolumeclaim.yaml
+  - open-webui-deployment.yaml
+  - open-webui-service.yaml

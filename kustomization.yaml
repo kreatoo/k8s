@@ -10,6 +10,7 @@ resources:
   - gatus/
   - answers/
   - dragonfly/
+  - open-webui
   #- forgejo/
   #- gha-runner/
   #- robusta/ # Need to add generated_values.yaml, see README.md for details

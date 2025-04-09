@@ -1,0 +1,11 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-external-egress
+  namespace: open-webui
+spec:
+  podSelector:
+    matchLabels:
+      service: copilot-api
+  egress:
+  - {}  # Empty braces allow all egress traffic

@@ -83,6 +83,12 @@ spec:
                 interval: 60s
                 conditions:
                   - "[STATUS] == 200"
+              - name: "ai"
+                group: "infra"
+                url: "https://ai.kreato.dev"
+                interval: 60s
+                conditions:
+                  - "[STATUS] == 200"
               - name: "klinux"
                 group: "infra"
                 url: "https://linux.kreato.dev"

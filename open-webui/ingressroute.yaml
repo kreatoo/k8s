@@ -1,0 +1,25 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: open-webui
+  namespace: open-webui
+  annotations:
+    cert-manager.io/cluster-issuer: mainissuer
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`ai.kreato.dev`)
+      priority: 10
+      services:
+        - kind: Service
+          name: open-webui
+          namespace: open-webui
+          passHostHeader: true
+          port: 1337
+          scheme: http
+  tls:
+    secretName: wildcard-kreato.dev-tls
+    domains:
+      - main: ai.kreato.dev
