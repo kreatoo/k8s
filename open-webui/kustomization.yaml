@@ -5,7 +5,6 @@ resources:
   - open-webui-data-persistentvolumeclaim.yaml
   - open-webui-deployment.yaml
   - open-webui-service.yaml
-
 images:
   - name: ghcr.io/kreatoo/copilot-api-docker
     newName: ghcr.io/kreatoo/copilot-api-docker
