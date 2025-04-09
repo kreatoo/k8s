@@ -23,7 +23,7 @@ spec:
               value: http://copilot-api:4141
             - name: OPENAI_API_KEY
               value: a
-          image: ghcr.io/open-webui/open-webui:v0.6.2
+          image: ghcr.io/open-webui/open-webui
           name: open-webui
           ports:
             - containerPort: 8080

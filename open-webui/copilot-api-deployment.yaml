@@ -18,7 +18,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: rose
       containers:
-        - image: ghcr.io/kreatoo/copilot-api-docker:3481c8c
+        - image: ghcr.io/kreatoo/copilot-api-docker
           name: copilot-api
           ports:
             - containerPort: 4141
