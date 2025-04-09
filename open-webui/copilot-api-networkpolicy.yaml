@@ -8,4 +8,4 @@ spec:
     matchLabels:
       service: copilot-api
   egress:
-  - {}  # Empty braces allow all egress traffic
+    - {} # Empty braces allow all egress traffic
