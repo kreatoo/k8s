@@ -61,7 +61,7 @@ graph TD;
 * Gatus - For health checks (https://status.kreato.dev)
 * AI - For my OpenWebUI instance (https://ai.kreato.dev)
 * Nginx-kpkg - for hosting a kpkg repository (https://bin.kreato.dev)
-* k0s - K8s distribution, has autopilot configured
+* k0s - K8s distribution
 * Robusta - For alarms and monitoring (optional)
 * Forgejo - For Git repositories (Disabled at the moment, optional)
 
