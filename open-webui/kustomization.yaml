@@ -1,5 +1,6 @@
 resources:
   - namespace.yaml
+  - copilot-api-data-persistentvolumeclaim.yaml
   - copilot-api-deployment.yaml
   - copilot-api-service.yaml
   - open-webui-data-persistentvolumeclaim.yaml

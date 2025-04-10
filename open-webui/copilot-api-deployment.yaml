@@ -23,4 +23,11 @@ spec:
           ports:
             - containerPort: 4141
               protocol: TCP
+          volumeMounts:
+            - mountPath: /root/.local/share/copilot-api
+              name: copilot-api-data
+      volumes:
+        - name: copilot-api-data
+          persistentVolumeClaim:
+            claimName: copilot-api-data
       restartPolicy: Always
