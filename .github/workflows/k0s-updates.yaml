@@ -23,7 +23,7 @@ jobs:
           hostname: k0s-version-checker
           
       - name: Install kubectl
-        uses: Azure/setup-kubectl@v4
+        uses: Azure/setup-kubectl@v4.0.0
         
       - name: Add kubeconfig
         env:
@@ -39,40 +39,37 @@ jobs:
           echo "Cluster version: $CLUSTER_VERSION"
           echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> $GITHUB_ENV
           
+          # Extract just the version number before any '+' symbol
+          CURRENT_VERSION=$(echo "$CLUSTER_VERSION" | cut -d'+' -f1)
+          echo "Current version (cleaned): $CURRENT_VERSION"
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          
       - name: Get latest k0s version
         run: |
           # Get latest k0s version
-          LATEST_K0S_VERSION=$(curl -s https://api.github.com/repos/k0sproject/k0s/releases/latest | jq -r '.tag_name')
-          echo "Latest k0s version: $LATEST_K0S_VERSION"
-          echo "LATEST_K0S_VERSION=$LATEST_K0S_VERSION" >> $GITHUB_ENV
+          LATEST_FULL_VERSION=$(curl -s https://api.github.com/repos/k0sproject/k0s/releases/latest | jq -r '.tag_name')
+          echo "Latest full k0s version: $LATEST_FULL_VERSION"
+          
+          # Extract just the version number before any '+' symbol
+          LATEST_VERSION=$(echo "$LATEST_FULL_VERSION" | cut -d'+' -f1)
+          echo "Latest version (cleaned): $LATEST_VERSION"
+          
+          echo "LATEST_FULL_VERSION=$LATEST_FULL_VERSION" >> $GITHUB_ENV
+          echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
           
       - name: Check for version mismatch
         id: check_version
         run: |
-          # Extract k0s version from gitVersion if available (format: vX.Y.Z+k0s.N)
-          if [[ "$CLUSTER_VERSION" == *"+k0s."* ]]; then
-            CURRENT_K0S_SEMVER=$(echo "$CLUSTER_VERSION" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+')
-            CURRENT_K0S_BUILD=$(echo "$CLUSTER_VERSION" | grep -o 'k0s\.[0-9]\+')
-            CURRENT_K0S="$CURRENT_K0S_SEMVER+$CURRENT_K0S_BUILD"
-            echo "Detected k0s version: $CURRENT_K0S"
-          else
-            # If not a k0s cluster or can't determine version
-            CURRENT_K0S="unknown"
-            echo "Unable to determine k0s version from: $CLUSTER_VERSION"
-          fi
+          echo "Comparing versions:"
+          echo "Current version: $CURRENT_VERSION"
+          echo "Latest version: $LATEST_VERSION"
           
-          echo "CURRENT_K0S=$CURRENT_K0S" >> $GITHUB_ENV
-          
-          # Latest k0s version without 'v' prefix for cleaner display
-          LATEST_K0S_CLEAN=${LATEST_K0S_VERSION#v}
-          echo "LATEST_K0S_CLEAN=$LATEST_K0S_CLEAN" >> $GITHUB_ENV
-          
-          # Check if we need to update
-          if [[ "$CURRENT_K0S" == "unknown" ]] || [[ "$LATEST_K0S_VERSION" != "$CURRENT_K0S_SEMVER" ]]; then
-            echo "Update may be required: Current=$CURRENT_K0S, Latest=$LATEST_K0S_VERSION"
+          # Compare version strings (without the build info)
+          if [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
+            echo "Version mismatch detected!"
             echo "VERSION_MISMATCH=true" >> $GITHUB_ENV
           else
-            echo "k0s version appears to be up to date"
+            echo "k0s version is up to date: $CURRENT_VERSION"
             echo "VERSION_MISMATCH=false" >> $GITHUB_ENV
           fi
           
@@ -82,7 +79,7 @@ jobs:
           mkdir -p .github
           cat > .github/k0s-update-template.md << EOF
           ---
-          title: "⚠️ k0s Update Available: ${{ env.CURRENT_K0S }} → ${{ env.LATEST_K0S_VERSION }}"
+          title: "⚠️ k0s Update Available: ${{ env.CURRENT_VERSION }} → ${{ env.LATEST_VERSION }}"
           labels: update, k0s, maintenance
           ---
           
@@ -91,8 +88,9 @@ jobs:
           A new version of k0s is available.
           
           - **Current Cluster Version**: \`${{ env.CLUSTER_VERSION }}\`
-          - **Current k0s Version**: \`${{ env.CURRENT_K0S }}\`
-          - **Latest k0s Version**: \`${{ env.LATEST_K0S_VERSION }}\`
+          - **Current Version**: \`${{ env.CURRENT_VERSION }}\`
+          - **Latest k0s Version**: \`${{ env.LATEST_FULL_VERSION }}\`
+          - **Latest Version**: \`${{ env.LATEST_VERSION }}\`
           
           ### Action Required
           
