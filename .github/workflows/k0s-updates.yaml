@@ -1,0 +1,106 @@
+name: Check k0s Version
+on:
+  schedule:
+    # Run daily at 8 AM
+    - cron: '0 8 * * *'
+  # Allow manual triggers
+  workflow_dispatch:
+
+jobs:
+  check-k0s-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Connect Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:k0s-check
+          version: 1.72.1
+          hostname: k0s-version-checker
+          
+      - name: Install kubectl
+        uses: Azure/setup-kubectl@v4
+        
+      - name: Add kubeconfig
+        env:
+          KUBECTLCONFFULL: ${{ secrets.KUBECONFIG }}
+        run: |
+          mkdir -p $HOME/.kube
+          echo "$KUBECTLCONFFULL" > $HOME/.kube/config
+          
+      - name: Get cluster version
+        run: |
+          # Get full cluster version
+          CLUSTER_VERSION=$(kubectl version -o json | jq -r '.serverVersion.gitVersion')
+          echo "Cluster version: $CLUSTER_VERSION"
+          echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> $GITHUB_ENV
+          
+      - name: Get latest k0s version
+        run: |
+          LATEST_K0S_VERSION=$(curl -s https://api.github.com/repos/k0sproject/k0s/releases/latest | jq -r '.tag_name')
+          echo "Latest k0s version: $LATEST_K0S_VERSION"
+          echo "LATEST_K0S_VERSION=$LATEST_K0S_VERSION" >> $GITHUB_ENV
+          
+          # Get exact Kubernetes version bundled with latest k0s
+          LATEST_K8S_VERSION=$(curl -s https://raw.githubusercontent.com/k0sproject/k0s/$LATEST_K0S_VERSION/version.yaml | grep kubernetes | head -1 | awk '{print $2}')
+          echo "Latest k0s bundles Kubernetes v$LATEST_K8S_VERSION"
+          echo "LATEST_K8S_VERSION=v$LATEST_K8S_VERSION" >> $GITHUB_ENV
+          
+      - name: Check for version mismatch
+        id: check_version
+        run: |
+          # Extract Kubernetes version from gitVersion
+          CURRENT_K8S_VERSION=$(echo "$CLUSTER_VERSION" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+')
+          echo "Current Kubernetes version: $CURRENT_K8S_VERSION"
+          echo "CURRENT_K8S_VERSION=$CURRENT_K8S_VERSION" >> $GITHUB_ENV
+          
+          # Compare full Kubernetes version strings
+          if [ "$CURRENT_K8S_VERSION" != "$LATEST_K8S_VERSION" ]; then
+            echo "Version mismatch detected!"
+            echo "Current Kubernetes: $CURRENT_K8S_VERSION"
+            echo "Latest k0s Kubernetes: $LATEST_K8S_VERSION"
+            echo "VERSION_MISMATCH=true" >> $GITHUB_ENV
+          else
+            echo "Kubernetes version is up to date: $CURRENT_K8S_VERSION"
+            echo "VERSION_MISMATCH=false" >> $GITHUB_ENV
+          fi
+          
+      - name: Create issue template
+        if: env.VERSION_MISMATCH == 'true'
+        run: |
+          mkdir -p .github
+          cat > .github/k0s-update-template.md << EOF
+          ---
+          title: "⚠️ k0s Update Required: ${{ env.CURRENT_K8S_VERSION }} → ${{ env.LATEST_K8S_VERSION }}"
+          labels: update, k0s, maintenance
+          ---
+          
+          ## k0s Update Required
+          
+          A version mismatch has been detected in the k0s cluster.
+          
+          - **Current Cluster Version**: \`${{ env.CLUSTER_VERSION }}\`
+          - **Current Kubernetes Version**: \`${{ env.CURRENT_K8S_VERSION }}\`
+          - **Latest k0s Version**: \`${{ env.LATEST_K0S_VERSION }}\`
+          - **Latest Kubernetes Version**: \`${{ env.LATEST_K8S_VERSION }}\`
+          
+          ### Action Required
+          
+          Please update k0s to the latest version to ensure security updates and bug fixes are applied.
+          
+          This issue was automatically created by the k0s Version Check workflow on $(date).
+          EOF
+          
+      - name: Create GitHub issue if version mismatch
+        if: env.VERSION_MISMATCH == 'true'
+        uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          filename: .github/k0s-update-template.md
+          update_existing: true
+          search_existing: open
