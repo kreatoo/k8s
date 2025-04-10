@@ -9,7 +9,7 @@ resources:
 images:
   - name: ghcr.io/kreatoo/copilot-api-docker
     newName: ghcr.io/kreatoo/copilot-api-docker
-    newTag: 3481c8c
+    newTag: v0.0.22
   - name: ghcr.io/open-webui/open-webui
     newName: ghcr.io/open-webui/open-webui
     newTag: v0.6.2
