@@ -41,31 +41,38 @@ jobs:
           
       - name: Get latest k0s version
         run: |
+          # Get latest k0s version
           LATEST_K0S_VERSION=$(curl -s https://api.github.com/repos/k0sproject/k0s/releases/latest | jq -r '.tag_name')
           echo "Latest k0s version: $LATEST_K0S_VERSION"
           echo "LATEST_K0S_VERSION=$LATEST_K0S_VERSION" >> $GITHUB_ENV
           
-          # Get exact Kubernetes version bundled with latest k0s
-          LATEST_K8S_VERSION=$(curl -s https://raw.githubusercontent.com/k0sproject/k0s/$LATEST_K0S_VERSION/version.yaml | grep kubernetes | head -1 | awk '{print $2}')
-          echo "Latest k0s bundles Kubernetes v$LATEST_K8S_VERSION"
-          echo "LATEST_K8S_VERSION=v$LATEST_K8S_VERSION" >> $GITHUB_ENV
-          
       - name: Check for version mismatch
         id: check_version
         run: |
-          # Extract Kubernetes version from gitVersion
-          CURRENT_K8S_VERSION=$(echo "$CLUSTER_VERSION" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+')
-          echo "Current Kubernetes version: $CURRENT_K8S_VERSION"
-          echo "CURRENT_K8S_VERSION=$CURRENT_K8S_VERSION" >> $GITHUB_ENV
+          # Extract k0s version from gitVersion if available (format: vX.Y.Z+k0s.N)
+          if [[ "$CLUSTER_VERSION" == *"+k0s."* ]]; then
+            CURRENT_K0S_SEMVER=$(echo "$CLUSTER_VERSION" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+')
+            CURRENT_K0S_BUILD=$(echo "$CLUSTER_VERSION" | grep -o 'k0s\.[0-9]\+')
+            CURRENT_K0S="$CURRENT_K0S_SEMVER+$CURRENT_K0S_BUILD"
+            echo "Detected k0s version: $CURRENT_K0S"
+          else
+            # If not a k0s cluster or can't determine version
+            CURRENT_K0S="unknown"
+            echo "Unable to determine k0s version from: $CLUSTER_VERSION"
+          fi
           
-          # Compare full Kubernetes version strings
-          if [ "$CURRENT_K8S_VERSION" != "$LATEST_K8S_VERSION" ]; then
-            echo "Version mismatch detected!"
-            echo "Current Kubernetes: $CURRENT_K8S_VERSION"
-            echo "Latest k0s Kubernetes: $LATEST_K8S_VERSION"
+          echo "CURRENT_K0S=$CURRENT_K0S" >> $GITHUB_ENV
+          
+          # Latest k0s version without 'v' prefix for cleaner display
+          LATEST_K0S_CLEAN=${LATEST_K0S_VERSION#v}
+          echo "LATEST_K0S_CLEAN=$LATEST_K0S_CLEAN" >> $GITHUB_ENV
+          
+          # Check if we need to update
+          if [[ "$CURRENT_K0S" == "unknown" ]] || [[ "$LATEST_K0S_VERSION" != "$CURRENT_K0S_SEMVER" ]]; then
+            echo "Update may be required: Current=$CURRENT_K0S, Latest=$LATEST_K0S_VERSION"
             echo "VERSION_MISMATCH=true" >> $GITHUB_ENV
           else
-            echo "Kubernetes version is up to date: $CURRENT_K8S_VERSION"
+            echo "k0s version appears to be up to date"
             echo "VERSION_MISMATCH=false" >> $GITHUB_ENV
           fi
           
@@ -75,18 +82,17 @@ jobs:
           mkdir -p .github
           cat > .github/k0s-update-template.md << EOF
           ---
-          title: "⚠️ k0s Update Required: ${{ env.CURRENT_K8S_VERSION }} → ${{ env.LATEST_K8S_VERSION }}"
+          title: "⚠️ k0s Update Available: ${{ env.CURRENT_K0S }} → ${{ env.LATEST_K0S_VERSION }}"
           labels: update, k0s, maintenance
           ---
           
-          ## k0s Update Required
+          ## k0s Update Available
           
-          A version mismatch has been detected in the k0s cluster.
+          A new version of k0s is available.
           
           - **Current Cluster Version**: \`${{ env.CLUSTER_VERSION }}\`
-          - **Current Kubernetes Version**: \`${{ env.CURRENT_K8S_VERSION }}\`
+          - **Current k0s Version**: \`${{ env.CURRENT_K0S }}\`
           - **Latest k0s Version**: \`${{ env.LATEST_K0S_VERSION }}\`
-          - **Latest Kubernetes Version**: \`${{ env.LATEST_K8S_VERSION }}\`
           
           ### Action Required
           
