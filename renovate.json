@@ -55,7 +55,7 @@
         "- name: ghcr.io/kreatoo/copilot-api-docker\\s+newName: ghcr.io/kreatoo/copilot-api-docker\\s+newTag:\\s+(?<currentValue>[0-9a-f]+)"
       ],
       "depNameTemplate": "ghcr.io/kreatoo/copilot-api-docker",
-      "datasourceTemplate": "github-tags",
+      "datasourceTemplate": "github-releases",
       "packageNameTemplate": "kreatoo/copilot-api-docker"
     }
   ],
