@@ -20,6 +20,11 @@ spec:
       containers:
         - image: ghcr.io/kreatoo/copilot-api-docker
           name: copilot-api
+          command:
+            - bun
+            - run
+            - dist/main.js
+            - start
           ports:
             - containerPort: 4141
               protocol: TCP
