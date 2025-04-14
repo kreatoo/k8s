@@ -4,7 +4,7 @@ helmCharts:
   - name: robusta
     repo: https://robusta-charts.storage.googleapis.com
     releaseName: robusta
-    version: 0.21.5
+    version: 0.22.0
     includeCRDs: true
     valuesFile: generated_values.yaml
     namespace: robusta
