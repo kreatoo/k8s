@@ -4,6 +4,7 @@ on:
     workflows: ["Kubernetes Static Validation"]
     types:
       - completed
+  workflow_dispatch:
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
