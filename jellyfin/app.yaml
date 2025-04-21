@@ -21,7 +21,7 @@ spec:
           media:
             enabled: true
             accessMode: ReadWriteOnce
-            size: 100Gi
+            size: 10Gi
   sources: []
   project: default
   syncPolicy:
