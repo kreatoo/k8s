@@ -5,14 +5,12 @@ on:
     - cron: '0 8 * * *'
   # Allow manual triggers
   workflow_dispatch:
-
 jobs:
   check-k0s-version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
       - name: Connect Tailscale
         uses: tailscale/github-action@v3
         with:
@@ -21,49 +19,44 @@ jobs:
           tags: tag:k8s-deploy
           version: 1.72.1
           hostname: k0s-version-checker
-          
       - name: Install kubectl
         uses: Azure/setup-kubectl@v4.0.0
-        
       - name: Add kubeconfig
         env:
           KUBECTLCONFFULL: ${{ secrets.KUBECONFIG }}
         run: |
           mkdir -p $HOME/.kube
           echo "$KUBECTLCONFFULL" > $HOME/.kube/config
-          
       - name: Get cluster version
         run: |
           # Get full cluster version
           CLUSTER_VERSION=$(kubectl version -o json | jq -r '.serverVersion.gitVersion')
           echo "Cluster version: $CLUSTER_VERSION"
           echo "CLUSTER_VERSION=$CLUSTER_VERSION" >> $GITHUB_ENV
-          
+
           # Extract just the version number before any '+' symbol
           CURRENT_VERSION=$(echo "$CLUSTER_VERSION" | cut -d'+' -f1)
           echo "Current version (cleaned): $CURRENT_VERSION"
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
-          
       - name: Get latest k0s version
         run: |
           # Get latest k0s version
           LATEST_FULL_VERSION=$(curl -s https://api.github.com/repos/k0sproject/k0s/releases/latest | jq -r '.tag_name')
           echo "Latest full k0s version: $LATEST_FULL_VERSION"
-          
+
           # Extract just the version number before any '+' symbol
           LATEST_VERSION=$(echo "$LATEST_FULL_VERSION" | cut -d'+' -f1)
           echo "Latest version (cleaned): $LATEST_VERSION"
-          
+
           echo "LATEST_FULL_VERSION=$LATEST_FULL_VERSION" >> $GITHUB_ENV
           echo "LATEST_VERSION=$LATEST_VERSION" >> $GITHUB_ENV
-          
       - name: Check for version mismatch
         id: check_version
         run: |
           echo "Comparing versions:"
           echo "Current version: $CURRENT_VERSION"
           echo "Latest version: $LATEST_VERSION"
-          
+
           # Compare version strings (without the build info)
           if [ "$CURRENT_VERSION" != "$LATEST_VERSION" ]; then
             echo "Version mismatch detected!"
@@ -72,7 +65,6 @@ jobs:
             echo "k0s version is up to date: $CURRENT_VERSION"
             echo "VERSION_MISMATCH=false" >> $GITHUB_ENV
           fi
-          
       - name: Create issue template
         if: env.VERSION_MISMATCH == 'true'
         run: |
@@ -82,23 +74,22 @@ jobs:
           title: "⚠️ k0s Update Available: ${{ env.CURRENT_VERSION }} → ${{ env.LATEST_VERSION }}"
           labels: update, k0s, maintenance
           ---
-          
+
           ## k0s Update Available
-          
+
           A new version of k0s is available.
-          
+
           - **Current Cluster Version**: \`${{ env.CLUSTER_VERSION }}\`
           - **Current Version**: \`${{ env.CURRENT_VERSION }}\`
           - **Latest k0s Version**: \`${{ env.LATEST_FULL_VERSION }}\`
           - **Latest Version**: \`${{ env.LATEST_VERSION }}\`
-          
+
           ### Action Required
-          
+
           Please update k0s to the latest version to ensure security updates and bug fixes are applied.
-          
+
           This issue was automatically created by the k0s Version Check workflow on $(date).
           EOF
-          
       - name: Create GitHub issue if version mismatch
         if: env.VERSION_MISMATCH == 'true'
         uses: JasonEtco/create-an-issue@v2

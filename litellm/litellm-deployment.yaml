@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: litellm
+  name: litellm
+  namespace: litellm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      service: litellm
+  template:
+    metadata:
+      labels:
+        service: litellm
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              service: litellm
+      volumes: # Define the volume based on the ConfigMap
+        - name: config-volume
+          configMap:
+            name: litellm-config
+            items:
+              - key: config.yaml
+                path: config.yaml
+      containers:
+        - name: litellm
+          image: ghcr.io/berriai/litellm
+          args:
+            - --config=/app/config.yaml
+          ports:
+            - containerPort: 4000
+              protocol: TCP
+          volumeMounts: # Mount the volume into the container
+            - name: config-volume
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://localhost:4000/health/liveliness || exit 1
+            failureThreshold: 3
+            initialDelaySeconds: 40
+            periodSeconds: 30
+            timeoutSeconds: 10
+          # IMPORTANT: Keep necessary secrets mounted as environment variables
+          # LiteLLM's config `os.environ/VAR_NAME` syntax will read these.
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_URL
+                  name: production
+            - name: LITELLM_MASTER_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: LITELLM_MASTER_KEY
+                  name: production
+            - name: LITELLM_SALT_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: LITELLM_SALT_KEY
+                  name: production
+            - name: CHUTES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: CHUTES_API_KEY
+                  name: production
+            - name: GITHUB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: GITHUB_API_KEY
+                  name: production
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: GEMINI_API_KEY
+                  name: production
+            - name: OPENROUTER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: OPENROUTER_API_KEY
+                  name: production
+            - name: SLACK_WEBHOOK_URL
+              valueFrom:
+                secretKeyRef:
+                  key: SLACK_WEBHOOK_URL
+                  name: production
+      restartPolicy: Always

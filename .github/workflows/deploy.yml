@@ -40,6 +40,11 @@ jobs:
           MASTODONENV: ${{ secrets.MASTODONENV }}
         run: |
           echo "$MASTODONENV" > mastodon/.env
+      - name: Add .env (litellm)
+        env:
+          LITELLMENV: ${{ secrets.LITELLMENV }}
+        run: |
+          echo "$LITELLMENV" > litellm/.env
       - name: Add generated_values.yaml (robusta)
         env:
           GENERATEDVALUES: ${{ secrets.GENERATED_VALUES }}

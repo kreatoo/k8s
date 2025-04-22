@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - postgres.yaml
+  - dragonfly.yaml
+  - litellm-deployment.yaml
+  - litellm-service.yaml
+  - litellm-configmap.yaml
+secretGenerator:
+  - name: production
+    namespace: litellm
+    envs:
+      - .env
+    options:
+      disableNameSuffixHash: true
+images:
+  - name: ghcr.io/berriai/litellm
+    newName: ghcr.io/berriai/litellm
+    newTag: main-v1.67.0-stable

@@ -59,7 +59,8 @@ graph TD;
 * Answers - For my own Q&A platform (https://answers.kreato.dev)
 * Mastodon - For my own fediverse instance (https://m.kreato.dev)
 * Gatus - For health checks (https://status.kreato.dev)
-* AI - For my OpenWebUI instance (https://ai.kreato.dev)
+* LiteLLM - For load balancing and caching LLMs
+* AI - For my Open WebUI instance (https://ai.kreato.dev)
 * Nginx-kpkg - for hosting a kpkg repository (https://bin.kreato.dev)
 * k0s - K8s distribution
 * Robusta - For alarms and monitoring (optional)
