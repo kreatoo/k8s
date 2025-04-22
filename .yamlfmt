@@ -1,0 +1,5 @@
+formatter:
+  retain_line_breaks: true
+  preserve_scalar_style: true
+  include_document_start: false
+  max_line_length: 0 
