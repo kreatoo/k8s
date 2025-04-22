@@ -10,37 +10,53 @@ data:
       - model_name: deepseek-r1
         litellm_params:
           model: github/MAI-DS-R1
+        model_info:
+          id: github-deepseek-r1
       - model_name: deepseek-r1
         litellm_params:
           model: openrouter/microsoft/mai-ds-r1:free
+        model_info:
+          id: openrouter-deepseek-r1
       - model_name: deepseek-r1
         litellm_params:
           model: openai/microsoft/MAI-DS-R1-FP8
           api_base: https://llm.chutes.ai/v1
           api_key: "os.environ/CHUTES_API_KEY"
+        model_info:
+          id: chutes-deepseek-r1
 
       # DeepSeek V3 0324
       - model_name: deepseek-v3-0324
         litellm_params:
           model: github/DeepSeek-V3-0324
+        model_info:
+          id: github-deepseek-v3-0324
 
       - model_name: deepseek-v3-0324
         litellm_params:
           model: openrouter/deepseek/deepseek-chat-v3-0324:free
+        model_info:
+          id: openrouter-deepseek-v3-0324
 
       - model_name: deepseek-v3-0324
         litellm_params:
           model: openai/deepseek-ai/DeepSeek-V3-0324
           api_base: https://llm.chutes.ai/v1
           api_key: "os.environ/CHUTES_API_KEY"
+        model_info:
+          id: chutes-deepseek-v3-0324
 
       # Gemini 2.5 Pro 0325
       - model_name: gemini-2.5-pro-03-25
         litellm_params:
           model: openrouter/google/gemini-2.5-pro-exp-03-25:free
+        model_info:
+          id: openrouter-gemini-2.5-pro-03-25
       - model_name: gemini-2.5-pro-03-25
         litellm_params:
           model: gemini/gemini-2.5-pro-exp-03-25
+        model_info:
+          id: gemini-gemini-2.5-pro-03-25
 
       # TODO: Remove this when Copilot is supported on LiteLLM
       - model_name: gemini-2.5-pro-03-25
@@ -48,6 +64,8 @@ data:
           model: openai/gemini-2.5-pro-preview-03-25
           api_base: http://copilot-api.open-webui.svc.cluster.local:4141
           api_key: blabladoesntmatter
+        model_info:
+          id: copilot-gemini-2.5-pro-03-25
 
       # LLama 4 Maverick
       - model_name: llama-4-maverick
@@ -55,32 +73,67 @@ data:
           model: openai/chutesai/Llama-4-Maverick-17B-128E-Instruct-FP8
           api_base: https://llm.chutes.ai/v1
           api_key: "os.environ/CHUTES_API_KEY"
+        model_info:
+          id: chutes-llama-4-maverick
       - model_name: llama-4-maverick
         litellm_params:
           model: github/Llama-4-Maverick-17B-128E-Instruct-FP8
+        model_info:
+          id: github-llama-4-maverick
       - model_name: llama-4-maverick
         litellm_params:
           model: openrouter/meta-llama/llama-4-maverick:free
+        model_info:
+          id: openrouter-llama-4-maverick
 
       # LLama 4 Scout
       - model_name: llama-4-scout
         litellm_params:
           model: github/Llama-4-Scout-17B-16E-Instruct
+        model_info:
+          id: github-llama-4-scout
       - model_name: llama-4-scout
         litellm_params:
           model: openai/chutesai/Llama-4-Scout-17B-16E-Instruct
           api_base: https://llm.chutes.ai/v1
           api_key: "os.environ/CHUTES_API_KEY"
+        model_info:
+          id: chutes-llama-4-scout
       - model_name: llama-4-scout
         litellm_params:
           model: openrouter/meta-llama/llama-4-scout:free
+        model_info:
+          id: openrouter-llama-4-scout
 
     litellm_settings:
+      num_retries: 3
+      request_timeout: 5
       drop_params: True
       cache: true
       cache_params:
         type: redis
         host: dragonfly-litellm
+      fallbacks:
+        - deepseek-r1:
+          - github-deepseek-r1
+          - openrouter-deepseek-r1
+          - chutes-deepseek-r1
+        - deepseek-v3-0324:
+          - github-deepseek-v3-0324
+          - openrouter-deepseek-v3-0324
+          - chutes-deepseek-v3-0324
+        - gemini-2.5-pro-03-25:
+          - openrouter-gemini-2.5-pro-03-25
+          - gemini-gemini-2.5-pro-03-25
+          - copilot-gemini-2.5-pro-03-25
+        - llama-4-maverick:
+          - github-llama-4-maverick
+          - chutes-llama-4-maverick
+          - openrouter-llama-4-maverick
+        - llama-4-scout:
+          - github-llama-4-scout
+          - chutes-llama-4-scout
+          - openrouter-llama-4-scout
 
     general_settings:
       alerting: ["slack"]
