@@ -21,7 +21,7 @@ Kreato's Kubernetes cluster
 * rose
     * Cloud: Hetzner Cloud
     * Region: Helsinki
-    * OS: Fedora 41
+    * OS: Fedora Rawhide
     * Kubernetes distro: K0s
     * Role: Control plane node
     * Machine: CAX31 (Ampere Altra) with 8 cores, 16GB RAM, 160GB storage
@@ -29,7 +29,7 @@ Kreato's Kubernetes cluster
 * lily
     * Cloud: Hetzner Cloud
     * Region: Falkenstein
-    * OS: Fedora 41
+    * OS: Fedora Rawhide
     * Kubernetes distro: K0s
     * Role: Agent node
     * Machine: CX22 (Intel Xeon) with 2 cores, 4GB RAM, 40GB storage
