@@ -107,6 +107,8 @@ data:
 
     litellm_settings:
       num_retries: 3
+      allowed_fails: 3
+      cooldown_time: 30
       request_timeout: 5
       drop_params: True
       cache: true
