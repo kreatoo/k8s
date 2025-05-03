@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> The cluster has moved to [bouquet2](https://github.com/kreatoo/bouquet2). This repository has been archived.
+
 <img src="https://raw.githubusercontent.com/Aikoyori/ProgrammingVTuberLogos/main/Kubernetes/kubernetesLogo.png"  height="100">
 
 ## bouquet
